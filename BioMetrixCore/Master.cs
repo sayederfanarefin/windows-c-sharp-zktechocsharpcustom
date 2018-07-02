@@ -2,11 +2,17 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using MySql.Data.MySqlClient;
+using System.Collections;
 
 namespace BioMetrixCore
 {
     public partial class Master : Form
     {
+        string connStr =
+                    "server=localhost;user=root;database=finger;port=3306;password=;";
+        MySqlConnection conn;
+
         DeviceManipulator manipulator = new DeviceManipulator();
         public ZkemClient objZkeeper;
         private bool isDeviceConnected = false;
@@ -58,6 +64,8 @@ namespace BioMetrixCore
             ToggleControls(false);
             ShowStatusBar(string.Empty, true);
             DisplayEmpty();
+
+            connectToMySql();
         }
 
 
@@ -233,6 +241,22 @@ namespace BioMetrixCore
                 {
                     BindToGridView(lstMachineInfo);
                     ShowStatusBar(lstMachineInfo.Count + " records found !!", true);
+
+                    Console.WriteLine("---");
+                    Console.WriteLine(lstMachineInfo.Count);
+                    IEnumerator enumerator=  lstMachineInfo.GetEnumerator();
+
+                    while (enumerator.MoveNext())
+                    {
+                        MachineInfo item = (MachineInfo)enumerator.Current;
+                        MySqlCommand command = conn.CreateCommand();
+                        string theCommand = "INSERT INTO log (MachineNumber, IndRegID, DateTimeRecord ) VALUES ('" + item.MachineNumber + "', '" + item.IndRegID + "', '" + item.DateTimeRecord + "')";
+                        Console.WriteLine(theCommand);
+                        command.CommandText = theCommand;
+                        command.ExecuteNonQuery();
+                    }
+
+                    
                 }
                 else
                     DisplayListOutput("No records found");
@@ -354,6 +378,26 @@ namespace BioMetrixCore
         private void tbxMachineNumber_TextChanged(object sender, EventArgs e)
         { UniversalStatic.ValidateInteger(tbxMachineNumber); }
 
+        private void connectToMySql() {
+        {
+                
+                 conn = new MySqlConnection(connStr);
+                try
+                {
+                    ShowStatusBar("Connecting to MySQL...", false);
+                    Console.WriteLine("Connecting to MySQL...");
+                    conn.Open();
+                    // Perform database operations 
 
+                    ShowStatusBar("MySql Connected", true);
+                }
+                catch (Exception ex)
+                {
+                    ShowStatusBar("Error Connecting to MySql", false);
+                    Console.WriteLine(ex.ToString());
+                }
+               
+            }
+        }
     }
 }
