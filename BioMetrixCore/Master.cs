@@ -4,6 +4,9 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using System.Collections;
+using System.Threading;
+using System.Collections.ObjectModel;
+using BioMetrixCore.Info;
 
 namespace BioMetrixCore
 {
@@ -17,44 +20,21 @@ namespace BioMetrixCore
         public ZkemClient objZkeeper;
         private bool isDeviceConnected = false;
 
-        public bool IsDeviceConnected
-        {
-            get { return isDeviceConnected; }
-            set
-            {
-                isDeviceConnected = value;
-                if (isDeviceConnected)
-                {
-                    ShowStatusBar("The device is connected !!", true);
-                    btnConnect.Text = "Disconnect";
-                    ToggleControls(true);
-                }
-                else
-                {
-                    ShowStatusBar("The device is diconnected !!", true);
-                    objZkeeper.Disconnect();
-                    btnConnect.Text = "Connect";
-                    ToggleControls(false);
-                }
-            }
-        }
+        
 
 
         private void ToggleControls(bool value)
         {
             btnBeep.Enabled = value;
-            btnDownloadFingerPrint.Enabled = value;
+            //btnDownloadFingerPrint.Enabled = value;
             btnPullData.Enabled = value;
             btnPowerOff.Enabled = value;
             btnRestartDevice.Enabled = value;
             btnGetDeviceTime.Enabled = value;
             btnEnableDevice.Enabled = value;
             btnDisableDevice.Enabled = value;
-            btnGetAllUserID.Enabled = value;
+            //btnGetAllUserID.Enabled = value;
 
-            tbxMachineNumber.Enabled = !value;
-            tbxPort.Enabled = !value;
-            tbxDeviceIP.Enabled = !value;
 
         }
 
@@ -65,7 +45,9 @@ namespace BioMetrixCore
             ShowStatusBar(string.Empty, true);
             DisplayEmpty();
 
-            connectToMySql();
+            init();
+
+
         }
 
 
@@ -75,9 +57,9 @@ namespace BioMetrixCore
             {
                 case UniversalStatic.acx_Disconnect:
                     {
-                        ShowStatusBar("The device is switched off", true);
+                        ShowStatusBar( "The device is switched off", true);
                         DisplayEmpty();
-                        btnConnect.Text = "Connect";
+                       
                         ToggleControls(false);
                         break;
                     }
@@ -89,55 +71,7 @@ namespace BioMetrixCore
         }
 
 
-        private void btnConnect_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.Cursor = Cursors.WaitCursor;
-                ShowStatusBar(string.Empty, true);
-
-                if (IsDeviceConnected)
-                {
-                    IsDeviceConnected = false;
-                    this.Cursor = Cursors.Default;
-
-                    return;
-                }
-
-                string ipAddress = tbxDeviceIP.Text.Trim();
-                string port = tbxPort.Text.Trim();
-                if (ipAddress == string.Empty || port == string.Empty)
-                    throw new Exception("The Device IP Address and Port is mandotory !!");
-
-                int portNumber = 4370;
-                if (!int.TryParse(port, out portNumber))
-                    throw new Exception("Not a valid port number");
-
-                bool isValidIpA = UniversalStatic.ValidateIP(ipAddress);
-                if (!isValidIpA)
-                    throw new Exception("The Device IP is invalid !!");
-
-                isValidIpA = UniversalStatic.PingTheDevice(ipAddress);
-                if (!isValidIpA)
-                    throw new Exception("The device at " + ipAddress + ":" + port + " did not respond!!");
-
-                objZkeeper = new ZkemClient(RaiseDeviceEvent);
-                IsDeviceConnected = objZkeeper.Connect_Net(ipAddress, portNumber);
-
-                if (IsDeviceConnected)
-                {
-                    string deviceInfo = manipulator.FetchDeviceInfo(objZkeeper, int.Parse(tbxMachineNumber.Text.Trim()));
-                    lblDeviceInfo.Text = deviceInfo;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                ShowStatusBar(ex.Message, false);
-            }
-            this.Cursor = Cursors.Default;
-
-        }
+ 
 
 
         public void ShowStatusBar(string message, bool type)
@@ -159,11 +93,11 @@ namespace BioMetrixCore
         }
 
 
-        private void btnPingDevice_Click(object sender, EventArgs e)
+        private void PingDevice( Device device)
         {
             ShowStatusBar(string.Empty, true);
 
-            string ipAddress = tbxDeviceIP.Text.Trim();
+            string ipAddress = device.IP;
 
             bool isValidIpA = UniversalStatic.ValidateIP(ipAddress);
             if (!isValidIpA)
@@ -171,26 +105,26 @@ namespace BioMetrixCore
 
             isValidIpA = UniversalStatic.PingTheDevice(ipAddress);
             if (isValidIpA)
-                ShowStatusBar("The device is active", true);
+                ShowStatusBar(device.IP + " -> " + "The device is active", true);
             else
-                ShowStatusBar("Could not read any response", false);
+                ShowStatusBar(device.IP + " -> " + "Could not read any response", false);
         }
 
-        private void btnGetAllUserID_Click(object sender, EventArgs e)
+        private void GetAllUserID(Device device)
         {
             try
             {
-                ICollection<UserIDInfo> lstUserIDInfo = manipulator.GetAllUserID(objZkeeper, int.Parse(tbxMachineNumber.Text.Trim()));
+                ICollection<UserIDInfo> lstUserIDInfo = manipulator.GetAllUserID(objZkeeper, int.Parse(device.DeviceId));
 
                 if (lstUserIDInfo != null && lstUserIDInfo.Count > 0)
                 {
                     BindToGridView(lstUserIDInfo);
-                    ShowStatusBar(lstUserIDInfo.Count + " records found !!", true);
+                    ShowStatusBar(device.IP + " -> " + lstUserIDInfo.Count + " records found !!", true);
                 }
                 else
                 {
                     DisplayEmpty();
-                    DisplayListOutput("No records found");
+                    DisplayListOutput(device.IP + " -> " + "No records found");
                 }
 
             }
@@ -201,25 +135,25 @@ namespace BioMetrixCore
 
         }
 
-        private void btnBeep_Click(object sender, EventArgs e)
+        private void Beep()
         {
             objZkeeper.Beep(100);
         }
 
-        private void btnDownloadFingerPrint_Click(object sender, EventArgs e)
+        private void DownloadFingerPrint(Device device)
         {
             try
             {
                 ShowStatusBar(string.Empty, true);
 
-                ICollection<UserInfo> lstFingerPrintTemplates = manipulator.GetAllUserInfo(objZkeeper, int.Parse(tbxMachineNumber.Text.Trim()));
+                ICollection<UserInfo> lstFingerPrintTemplates = manipulator.GetAllUserInfo(objZkeeper, int.Parse(device.DeviceId));
                 if (lstFingerPrintTemplates != null && lstFingerPrintTemplates.Count > 0)
                 {
                     BindToGridView(lstFingerPrintTemplates);
-                    ShowStatusBar(lstFingerPrintTemplates.Count + " records found !!", true);
+                    ShowStatusBar(device.IP + " -> " + lstFingerPrintTemplates.Count + " records found !!", true);
                 }
                 else
-                    DisplayListOutput("No records found");
+                    DisplayListOutput(device.IP +" -> "+"No records found");
             }
             catch (Exception ex)
             {
@@ -228,45 +162,75 @@ namespace BioMetrixCore
 
         }
 
-
-        private void btnPullData_Click(object sender, EventArgs e)
+        private Boolean GetLogsToMySql(Device device)
         {
+            Boolean status = false;
+            if (device.status) {
+            
             try
             {
                 ShowStatusBar(string.Empty, true);
 
-                ICollection<MachineInfo> lstMachineInfo = manipulator.GetLogData(objZkeeper, int.Parse(tbxMachineNumber.Text.Trim()));
+                ICollection<MachineInfo> lstMachineInfo = manipulator.GetLogData(objZkeeper, int.Parse(device.DeviceId));
 
                 if (lstMachineInfo != null && lstMachineInfo.Count > 0)
                 {
-                    BindToGridView(lstMachineInfo);
-                    ShowStatusBar(lstMachineInfo.Count + " records found !!", true);
+                    Boolean clearedLog = false;
+
+                    ShowStatusBar(device.IP +" -> "+ lstMachineInfo.Count + " records found !!", true);
 
                     Console.WriteLine("---");
                     Console.WriteLine(lstMachineInfo.Count);
-                    IEnumerator enumerator=  lstMachineInfo.GetEnumerator();
-
+                    IEnumerator enumerator = lstMachineInfo.GetEnumerator();
+                        string theCommand = "INSERT INTO log (MachineNumber, IndRegID, DateTimeRecord ) VALUES ";
+                        int count = 0;
                     while (enumerator.MoveNext())
                     {
                         MachineInfo item = (MachineInfo)enumerator.Current;
-                        MySqlCommand command = conn.CreateCommand();
-                        string theCommand = "INSERT INTO log (MachineNumber, IndRegID, DateTimeRecord ) VALUES ('" + item.MachineNumber + "', '" + item.IndRegID + "', '" + item.DateTimeRecord + "')";
-                        Console.WriteLine(theCommand);
-                        command.CommandText = theCommand;
-                        command.ExecuteNonQuery();
+                        theCommand += "('" + item.MachineNumber + "', '" + item.IndRegID + "', '" + item.DateTimeRecord + "')";
+                            count++;
+                            if (count < lstMachineInfo.Count)
+                            {
+                                theCommand += ", ";
+                            }
+                       
                     }
 
-                    
+                        Console.WriteLine(theCommand);
+                        MySqlCommand command = conn.CreateCommand();
+                        command.CommandText = theCommand;
+                        Boolean mysqlInsertSuccess = false;
+                        try
+                        {
+                            int o = command.ExecuteNonQuery();
+                            mysqlInsertSuccess = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                            mysqlInsertSuccess = false;
+                        }
+                       
+                        if (mysqlInsertSuccess)
+                        {
+                            clearedLog = manipulator.ClearGLog(objZkeeper, int.Parse(device.DeviceId));
+                        }
+                        status = true;
                 }
-                else
+                else {
                     DisplayListOutput("No records found");
+                    status = false;
+                }
+
             }
             catch (Exception ex)
             {
                 DisplayListOutput(ex.Message);
             }
-
+            }
+            return status;
         }
+        
 
 
         private void ClearGrid()
@@ -309,7 +273,7 @@ namespace BioMetrixCore
 
 
 
-        private void btnPowerOff_Click(object sender, EventArgs e)
+        private void PowerOff(Device device)
         {
             this.Cursor = Cursors.WaitCursor;
 
@@ -317,30 +281,30 @@ namespace BioMetrixCore
             resultDia = MessageBox.Show("Do you wish to Power Off the Device ??", "Power Off Device", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (resultDia == DialogResult.Yes)
             {
-                bool deviceOff = objZkeeper.PowerOffDevice(int.Parse(tbxMachineNumber.Text.Trim()));
+                bool deviceOff = objZkeeper.PowerOffDevice(int.Parse(device.DeviceId));
 
             }
 
             this.Cursor = Cursors.Default;
         }
 
-        private void btnRestartDevice_Click(object sender, EventArgs e)
+        private void RestartDevice(Device device)
         {
 
             DialogResult rslt = MessageBox.Show("Do you wish to restart the device now ??", "Restart Device", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (rslt == DialogResult.Yes)
             {
-                if (objZkeeper.RestartDevice(int.Parse(tbxMachineNumber.Text.Trim())))
-                    ShowStatusBar("The device is being restarted, Please wait...", true);
+                if (objZkeeper.RestartDevice(int.Parse(device.DeviceId)))
+                    ShowStatusBar(device.IP + " -> " + "The device is being restarted, Please wait...", true);
                 else
-                    ShowStatusBar("Operation failed,please try again", false);
+                    ShowStatusBar(device.IP + " -> " + "Operation failed,please try again", false);
             }
 
         }
 
-        private void btnGetDeviceTime_Click(object sender, EventArgs e)
+        private void GetDeviceTime(Device device)
         {
-            int machineNumber = int.Parse(tbxMachineNumber.Text.Trim());
+            int machineNumber = int.Parse(device.DeviceId);
             int dwYear = 0;
             int dwMonth = 0;
             int dwDay = 0;
@@ -357,30 +321,28 @@ namespace BioMetrixCore
         }
         
 
-        private void btnEnableDevice_Click(object sender, EventArgs e)
+        private void EnableDevice(Device device)
         {
             // This is of no use since i implemented zkemKeeper the other way
-            bool deviceEnabled = objZkeeper.EnableDevice(int.Parse(tbxMachineNumber.Text.Trim()), true);
+            bool deviceEnabled = objZkeeper.EnableDevice(int.Parse(device.DeviceId), true);
 
         }
 
      
 
-        private void btnDisableDevice_Click(object sender, EventArgs e)
+        private void DisableDevice(Device device)
         {
             // This is of no use since i implemented zkemKeeper the other way
-            bool deviceDisabled = objZkeeper.DisableDeviceWithTimeOut(int.Parse(tbxMachineNumber.Text.Trim()), 3000);
+            bool deviceDisabled = objZkeeper.DisableDeviceWithTimeOut(int.Parse(device.DeviceId), 3000);
         }
 
-        private void tbxPort_TextChanged(object sender, EventArgs e)
-        { UniversalStatic.ValidateInteger(tbxPort); }
+        
 
-        private void tbxMachineNumber_TextChanged(object sender, EventArgs e)
-        { UniversalStatic.ValidateInteger(tbxMachineNumber); }
+       
 
-        private void connectToMySql() {
+        private Boolean connectToMySql() {
         {
-                
+                Boolean status = false;
                  conn = new MySqlConnection(connStr);
                 try
                 {
@@ -390,14 +352,119 @@ namespace BioMetrixCore
                     // Perform database operations 
 
                     ShowStatusBar("MySql Connected", true);
+                    status = true;
                 }
                 catch (Exception ex)
                 {
                     ShowStatusBar("Error Connecting to MySql", false);
                     Console.WriteLine(ex.ToString());
+                    status = false;
                 }
-               
+
+                return status;
+
+
             }
+        }
+
+       
+
+        private void init() {
+          
+            while (!connectToMySql()) {
+                Thread.Sleep(500);
+            }
+            getDevices();
+
+            
+            for (int i=0; i < devices.Count; i++)
+            {
+                Device device = devices[i];
+                if (GetLogsToMySql(device))
+                {
+                    devices[i].updatedAt = DateTime.Now;
+                }
+
+            }
+            
+
+        }
+
+        List<Info.Device> devices;
+
+        private void getDevices() {
+            string query = "SELECT * FROM devices";
+
+            var cmd = new MySql.Data.MySqlClient.MySqlCommand(query, conn);
+            var reader = cmd.ExecuteReader();
+            devices = new List<Info.Device>();
+
+            while (reader.Read())
+            {
+                String DeviceName = (String)reader["DeviceName"];
+                String DeviceId = (String)reader["DeviceId"];
+                String IP = (String)reader["IP"];
+                String Port = (String)reader["Port"];
+                String Mac = (String)reader["Mac"];
+                Int64 Id = (Int64)reader["Id"];
+
+                Info.Device device = new Info.Device();
+                device.DeviceId = DeviceId;
+                device.DeviceName = DeviceName;
+                device.IP = IP;
+                device.Port = Port;
+                device.Mac = Mac;
+                device.Id = Id;
+                devices.Add(device);
+
+                connectToDevice(device);
+            }
+            reader.Close();
+
+            BindToGridView(devices);
+
+        }
+
+        private void connectToDevice(Device device) {
+           //Boolean status = false;
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                ShowStatusBar(string.Empty, true);
+
+                string ipAddress = device.IP;
+                string port = device.Port;
+                
+
+                int portNumber = 4370;
+                if (!int.TryParse(port, out portNumber))
+                    throw new Exception("Not a valid port number");
+
+                bool isValidIpA = UniversalStatic.ValidateIP(ipAddress);
+                if (!isValidIpA)
+                    throw new Exception("The Device IP is invalid !!");
+
+                isValidIpA = UniversalStatic.PingTheDevice(ipAddress);
+                if (!isValidIpA)
+                    throw new Exception("The device at " + ipAddress + ":" + port + " did not respond!!");
+
+                objZkeeper = new ZkemClient(RaiseDeviceEvent);
+                device.status = objZkeeper.Connect_Net(ipAddress, portNumber);
+
+                if (device.status)
+                {
+                    string deviceInfo = manipulator.FetchDeviceInfo(objZkeeper, int.Parse(device.DeviceId));
+                    lblDeviceInfo.Text = deviceInfo;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ShowStatusBar(ex.Message, false);
+            }
+            this.Cursor = Cursors.Default;
+
+           // return status;
         }
     }
 }
