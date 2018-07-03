@@ -7,6 +7,7 @@ using System.Collections;
 using System.Threading;
 using System.Collections.ObjectModel;
 using BioMetrixCore.Info;
+using System.Threading.Tasks;
 
 namespace BioMetrixCore
 {
@@ -158,8 +159,10 @@ namespace BioMetrixCore
 
         }
 
-        private Boolean GetLogsToMySql(ZkemClient objZkeeper, Device device)
+        private Boolean GetLogsToMySql(Combination combination)
         {
+            Device device = combination.device;
+            ZkemClient objZkeeper = combination.objZkeeper;
             Boolean status = false;
             if (device.status) {
             
@@ -226,9 +229,6 @@ namespace BioMetrixCore
             }
             return status;
         }
-        
-
-
         private void ClearGrid()
         {
             if (dgvRecords.Controls.Count > 2)
@@ -247,9 +247,6 @@ namespace BioMetrixCore
             dgvRecords.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             UniversalStatic.ChangeGridProperties(dgvRecords);
         }
-
-      
-
         private void DisplayListOutput(string message)
         {
             if (dgvRecords.Controls.Count > 2)
@@ -257,18 +254,13 @@ namespace BioMetrixCore
 
             ShowStatusBar(message, false);
         }
-
         private void DisplayEmpty()
         {
             ClearGrid();
             dgvRecords.Controls.Add(new DataEmpty());
         }
-
         private void pnlHeader_Paint(object sender, PaintEventArgs e)
         { UniversalStatic.DrawLineInFooter(pnlHeader, Color.FromArgb(204, 204, 204), 2); }
-
-
-
         private void PowerOff(ZkemClient objZkeeper, Device device)
         {
             this.Cursor = Cursors.WaitCursor;
@@ -283,7 +275,6 @@ namespace BioMetrixCore
 
             this.Cursor = Cursors.Default;
         }
-
         private void RestartDevice(ZkemClient objZkeeper,Device device)
         {
 
@@ -316,26 +307,19 @@ namespace BioMetrixCore
             BindToGridView(lstDeviceInfo);
         }
         
-
         private void EnableDevice(ZkemClient objZkeeper,Device device)
         {
             // This is of no use since i implemented zkemKeeper the other way
             bool deviceEnabled = objZkeeper.EnableDevice(int.Parse(device.DeviceId), true);
 
         }
-
-     
-
+        
         private void DisableDevice(ZkemClient objZkeeper, Device device)
         {
             // This is of no use since i implemented zkemKeeper the other way
             bool deviceDisabled = objZkeeper.DisableDeviceWithTimeOut(int.Parse(device.DeviceId), 3000);
         }
-
         
-
-       
-
         private Boolean connectToMySql() {
         {
                 Boolean status = false;
@@ -362,38 +346,26 @@ namespace BioMetrixCore
 
             }
         }
-
-       
-
+        
         private void init() {
             while (!connectToMySql()) {
                 Thread.Sleep(500);
             }
             getDevices();
-            
-            for (int i=0; i < devices.Count; i++)
-            {
-              //  Device device = devices[i].device;
-                if (GetLogsToMySql(devices[i].objZkeeper, devices[i].device))
-                {
-                    devices[i].device.updatedAt = DateTime.Now;
-                }
-
-            }
-            
             conn.Close();
             
         }
 
         List<Info.Combination> devices;
+        List<Info.Device> devices2 = new List<Info.Device>();
 
-        private void getDevices() {
+        private async void getDevices() {
             string query = "SELECT * FROM devices";
 
             var cmd = new MySql.Data.MySqlClient.MySqlCommand(query, conn);
             var reader = cmd.ExecuteReader();
             devices = new List<Info.Combination>();
-            List<Info.Device> devices2 = new List<Info.Device>();
+            
             while (reader.Read())
             {
                 String DeviceName = (String)reader["DeviceName"];
@@ -411,20 +383,14 @@ namespace BioMetrixCore
                 device.Mac = Mac;
                 device.Id = Id;
                 
-                ZkemClient objZkeeper = connectToDevice(device);
-                Combination combination = new Combination();
-                combination.device = device;
-                combination.objZkeeper = objZkeeper;
-                devices.Add(combination);
-                devices2.Add(device);
+                await connectToDevice(device, UpdateUi);
+                
             }
             reader.Close();
-
-            BindToGridView(devices2);
-
+            UpdateUi(true);
         }
 
-        private ZkemClient connectToDevice( Device device) {
+        private async Task connectToDevice( Device device, Action<Boolean> callback) {
             //Boolean status = false;
             ZkemClient objZkeeper =null;
             try
@@ -457,6 +423,13 @@ namespace BioMetrixCore
                     lblDeviceInfo.Text = deviceInfo;
                 }
 
+                Combination combination = new Combination();
+                combination.device = device;
+                combination.objZkeeper = objZkeeper;
+                devices.Add(combination);
+                devices2.Add(device);
+                Boolean status = GetLogsToMySql(combination);
+                callback(status);
             }
             catch (Exception ex)
             {
@@ -464,7 +437,7 @@ namespace BioMetrixCore
             }
             this.Cursor = Cursors.Default;
 
-            return objZkeeper;
+           
         }
 
         private void btnPullData_Click(object sender, EventArgs e)
@@ -514,6 +487,10 @@ namespace BioMetrixCore
         private void btnUploadUserInfo_Click(object sender, EventArgs e)
         {
             addUser(devices[0].objZkeeper, devices[0].device);
+        }
+        private void UpdateUi(Boolean status)
+        {
+            BindToGridView(devices2);
         }
     }
 }
