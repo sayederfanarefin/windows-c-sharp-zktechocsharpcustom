@@ -17,7 +17,7 @@ namespace BioMetrixCore
         MySqlConnection conn;
 
         DeviceManipulator manipulator = new DeviceManipulator();
-        public ZkemClient objZkeeper;
+       // public ZkemClient objZkeeper;
         private bool isDeviceConnected = false;
 
         
@@ -33,9 +33,6 @@ namespace BioMetrixCore
             btnGetDeviceTime.Enabled = value;
             btnEnableDevice.Enabled = value;
             btnDisableDevice.Enabled = value;
-            //btnGetAllUserID.Enabled = value;
-
-
         }
 
         public Master()
@@ -44,11 +41,9 @@ namespace BioMetrixCore
             ToggleControls(false);
             ShowStatusBar(string.Empty, true);
             DisplayEmpty();
-
-           
+            
                 init();
                 
-
         }
 
 
@@ -111,7 +106,7 @@ namespace BioMetrixCore
                 ShowStatusBar(device.IP + " -> " + "Could not read any response", false);
         }
 
-        private void GetAllUserID(Device device)
+        private void GetAllUserID(ZkemClient objZkeeper, Device device)
         {
             try
             {
@@ -136,12 +131,12 @@ namespace BioMetrixCore
 
         }
 
-        private void Beep()
+        private void Beep(ZkemClient objZkeeper)
         {
             objZkeeper.Beep(100);
         }
 
-        private void DownloadFingerPrint(Device device)
+        private void DownloadFingerPrint(ZkemClient objZkeeper, Device device)
         {
             try
             {
@@ -163,7 +158,7 @@ namespace BioMetrixCore
 
         }
 
-        private Boolean GetLogsToMySql(Device device)
+        private Boolean GetLogsToMySql(ZkemClient objZkeeper, Device device)
         {
             Boolean status = false;
             if (device.status) {
@@ -274,7 +269,7 @@ namespace BioMetrixCore
 
 
 
-        private void PowerOff(Device device)
+        private void PowerOff(ZkemClient objZkeeper, Device device)
         {
             this.Cursor = Cursors.WaitCursor;
 
@@ -289,7 +284,7 @@ namespace BioMetrixCore
             this.Cursor = Cursors.Default;
         }
 
-        private void RestartDevice(Device device)
+        private void RestartDevice(ZkemClient objZkeeper,Device device)
         {
 
             DialogResult rslt = MessageBox.Show("Do you wish to restart the device now ??", "Restart Device", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -303,7 +298,7 @@ namespace BioMetrixCore
 
         }
 
-        private void GetDeviceTime(Device device)
+        private void GetDeviceTime(ZkemClient objZkeeper, Device device)
         {
             int machineNumber = int.Parse(device.DeviceId);
             int dwYear = 0;
@@ -322,7 +317,7 @@ namespace BioMetrixCore
         }
         
 
-        private void EnableDevice(Device device)
+        private void EnableDevice(ZkemClient objZkeeper,Device device)
         {
             // This is of no use since i implemented zkemKeeper the other way
             bool deviceEnabled = objZkeeper.EnableDevice(int.Parse(device.DeviceId), true);
@@ -331,7 +326,7 @@ namespace BioMetrixCore
 
      
 
-        private void DisableDevice(Device device)
+        private void DisableDevice(ZkemClient objZkeeper, Device device)
         {
             // This is of no use since i implemented zkemKeeper the other way
             bool deviceDisabled = objZkeeper.DisableDeviceWithTimeOut(int.Parse(device.DeviceId), 3000);
@@ -378,10 +373,10 @@ namespace BioMetrixCore
             
             for (int i=0; i < devices.Count; i++)
             {
-                Device device = devices[i];
-                if (GetLogsToMySql(device))
+              //  Device device = devices[i].device;
+                if (GetLogsToMySql(devices[i].objZkeeper, devices[i].device))
                 {
-                    devices[i].updatedAt = DateTime.Now;
+                    devices[i].device.updatedAt = DateTime.Now;
                 }
 
             }
@@ -390,15 +385,15 @@ namespace BioMetrixCore
             
         }
 
-        List<Info.Device> devices;
+        List<Info.Combination> devices;
 
         private void getDevices() {
             string query = "SELECT * FROM devices";
 
             var cmd = new MySql.Data.MySqlClient.MySqlCommand(query, conn);
             var reader = cmd.ExecuteReader();
-            devices = new List<Info.Device>();
-
+            devices = new List<Info.Combination>();
+            List<Info.Device> devices2 = new List<Info.Device>();
             while (reader.Read())
             {
                 String DeviceName = (String)reader["DeviceName"];
@@ -415,18 +410,23 @@ namespace BioMetrixCore
                 device.Port = Port;
                 device.Mac = Mac;
                 device.Id = Id;
-                devices.Add(device);
-
-                connectToDevice(device);
+                
+                ZkemClient objZkeeper = connectToDevice(device);
+                Combination combination = new Combination();
+                combination.device = device;
+                combination.objZkeeper = objZkeeper;
+                devices.Add(combination);
+                devices2.Add(device);
             }
             reader.Close();
 
-            BindToGridView(devices);
+            BindToGridView(devices2);
 
         }
 
-        private void connectToDevice(Device device) {
-           //Boolean status = false;
+        private ZkemClient connectToDevice( Device device) {
+            //Boolean status = false;
+            ZkemClient objZkeeper =null;
             try
             {
                 this.Cursor = Cursors.WaitCursor;
@@ -464,7 +464,7 @@ namespace BioMetrixCore
             }
             this.Cursor = Cursors.Default;
 
-           // return status;
+            return objZkeeper;
         }
 
         private void btnPullData_Click(object sender, EventArgs e)
@@ -472,38 +472,48 @@ namespace BioMetrixCore
 
         }
 
-        private void addUser(Device device)
+        private void addUser(ZkemClient objZkeeper, Device device)
         {
             // manipulator.PushUserDataToDevice(objZkeeper, int.Parse(device.DeviceId), "xxxsssxxx");
             
             //ICollection<UserIDInfo> lstUserIDInfo = manipulator.GetAllUserID(objZkeeper, int.Parse(device.DeviceId));
-            //ICollection<UserInfo> lstUserInfo = manipulator.GetAllUserInfo (objZkeeper, int.Parse(device.DeviceId));
+            ICollection<UserInfo> lstUserInfo = manipulator.GetAllUserInfo (objZkeeper, int.Parse(device.DeviceId));
             //Console.WriteLine("-> user id count: " + lstUserIDInfo.Count);
-            //Console.WriteLine("-> user count: " + lstUserInfo.Count);
+            Console.WriteLine("-> user count: " + lstUserInfo.Count);
             
             UserInfo sinfo = new UserInfo();
 
             sinfo.EnrollNumber = "40";
-            sinfo.Name = "fssfs";
-            sinfo.FingerIndex = 3;
+            sinfo.Name = "Erfan";
+            sinfo.FingerIndex = 0;
             sinfo.TmpData = "";
             sinfo.Privelage = 0;
-            sinfo.Password = "";
+            sinfo.Password = "123456";
             sinfo.Enabled = true;
             sinfo.iFlag = "1";
+            sinfo.MachineNumber = 1;
+            
+            List <UserInfo> lstUserInfo2 = new List<UserInfo>();
 
-            //Add you new UserInfo Here and  uncomment the below code
-            List<UserInfo> lstUserInfo = new List<UserInfo>();
+            lstUserInfo2.Add(sinfo);
+            try
+            {
+                manipulator.UploadFTPTemplate(objZkeeper, 1 , lstUserInfo2);
 
-            lstUserInfo.Add(sinfo);
-            manipulator.UploadFTPTemplate(objZkeeper, int.Parse(device.DeviceId), lstUserInfo);
-          
+            }
+            catch (Exception rrr) {
+                Console.WriteLine("----------------error------------");
+                Console.WriteLine(rrr);
+            }
+            lstUserInfo = manipulator.GetAllUserInfo(objZkeeper, int.Parse(device.DeviceId));
+            //Console.WriteLine("-> user id count: " + lstUserIDInfo.Count);
+            Console.WriteLine("-> user count: " + lstUserInfo.Count);
 
         }
 
         private void btnUploadUserInfo_Click(object sender, EventArgs e)
         {
-            addUser(devices[0]);
+            addUser(devices[0].objZkeeper, devices[0].device);
         }
     }
 }

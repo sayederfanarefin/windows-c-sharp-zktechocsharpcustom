@@ -105,6 +105,7 @@
     <Compile Include="Controls\DataEmpty.Designer.cs">
       <DependentUpon>DataEmpty.cs</DependentUpon>
     </Compile>
+    <Compile Include="Info\Combination.cs" />
     <Compile Include="Info\Device.cs" />
     <Compile Include="Info\UserIDInfo.cs" />
     <Compile Include="Utilities\DeviceManipulator.cs" />
