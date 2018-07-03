@@ -68,7 +68,6 @@
             this.btnBeep.TabIndex = 5;
             this.btnBeep.Text = "Beep";
             this.btnBeep.UseVisualStyleBackColor = true;
-           // this.btnBeep.Click += new System.EventHandler(this.btnBeep_Click);
             // 
             // pnlHeader
             // 
@@ -102,7 +101,6 @@
             this.btnPowerOff.TabIndex = 885;
             this.btnPowerOff.Text = "Power Off";
             this.btnPowerOff.UseVisualStyleBackColor = true;
-            //this.btnPowerOff.Click += new System.EventHandler(this.btnPowerOff_Click);
             // 
             // btnRestartDevice
             // 
@@ -112,7 +110,6 @@
             this.btnRestartDevice.TabIndex = 886;
             this.btnRestartDevice.Text = "Restart Device";
             this.btnRestartDevice.UseVisualStyleBackColor = true;
-           // this.btnRestartDevice.Click += new System.EventHandler(this.btnRestartDevice_Click);
             // 
             // btnGetDeviceTime
             // 
@@ -122,7 +119,6 @@
             this.btnGetDeviceTime.TabIndex = 887;
             this.btnGetDeviceTime.Text = "Get Device Time";
             this.btnGetDeviceTime.UseVisualStyleBackColor = true;
-           // this.btnGetDeviceTime.Click += new System.EventHandler(this.btnGetDeviceTime_Click);
             // 
             // btnEnableDevice
             // 
@@ -132,7 +128,6 @@
             this.btnEnableDevice.TabIndex = 889;
             this.btnEnableDevice.Text = "Enable Device";
             this.btnEnableDevice.UseVisualStyleBackColor = true;
-           // this.btnEnableDevice.Click += new System.EventHandler(this.btnEnableDevice_Click);
             // 
             // btnDisableDevice
             // 
@@ -142,7 +137,6 @@
             this.btnDisableDevice.TabIndex = 890;
             this.btnDisableDevice.Text = "Disable Device";
             this.btnDisableDevice.UseVisualStyleBackColor = true;
-            //this.btnDisableDevice.Click += new System.EventHandler(this.btnDisableDevice_Click);
             // 
             // panel1
             // 
@@ -181,6 +175,7 @@
             this.btnPullData.TabIndex = 10;
             this.btnPullData.Text = "Get Log Data";
             this.btnPullData.UseVisualStyleBackColor = true;
+            this.btnPullData.Click += new System.EventHandler(this.btnPullData_Click);
             // 
             // btnUploadUserInfo
             // 
@@ -190,6 +185,7 @@
             this.btnUploadUserInfo.TabIndex = 893;
             this.btnUploadUserInfo.Text = "Upload User Info";
             this.btnUploadUserInfo.UseVisualStyleBackColor = true;
+            this.btnUploadUserInfo.Click += new System.EventHandler(this.btnUploadUserInfo_Click);
             // 
             // lblDeviceInfo
             // 

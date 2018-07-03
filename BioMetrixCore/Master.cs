@@ -45,8 +45,9 @@ namespace BioMetrixCore
             ShowStatusBar(string.Empty, true);
             DisplayEmpty();
 
-            init();
-
+           
+                init();
+                
 
         }
 
@@ -370,12 +371,10 @@ namespace BioMetrixCore
        
 
         private void init() {
-          
             while (!connectToMySql()) {
                 Thread.Sleep(500);
             }
             getDevices();
-
             
             for (int i=0; i < devices.Count; i++)
             {
@@ -387,7 +386,8 @@ namespace BioMetrixCore
 
             }
             
-
+            conn.Close();
+            
         }
 
         List<Info.Device> devices;
@@ -465,6 +465,45 @@ namespace BioMetrixCore
             this.Cursor = Cursors.Default;
 
            // return status;
+        }
+
+        private void btnPullData_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void addUser(Device device)
+        {
+            // manipulator.PushUserDataToDevice(objZkeeper, int.Parse(device.DeviceId), "xxxsssxxx");
+            
+            //ICollection<UserIDInfo> lstUserIDInfo = manipulator.GetAllUserID(objZkeeper, int.Parse(device.DeviceId));
+            //ICollection<UserInfo> lstUserInfo = manipulator.GetAllUserInfo (objZkeeper, int.Parse(device.DeviceId));
+            //Console.WriteLine("-> user id count: " + lstUserIDInfo.Count);
+            //Console.WriteLine("-> user count: " + lstUserInfo.Count);
+            
+            UserInfo sinfo = new UserInfo();
+
+            sinfo.EnrollNumber = "40";
+            sinfo.Name = "fssfs";
+            sinfo.FingerIndex = 3;
+            sinfo.TmpData = "";
+            sinfo.Privelage = 0;
+            sinfo.Password = "";
+            sinfo.Enabled = true;
+            sinfo.iFlag = "1";
+
+            //Add you new UserInfo Here and  uncomment the below code
+            List<UserInfo> lstUserInfo = new List<UserInfo>();
+
+            lstUserInfo.Add(sinfo);
+            manipulator.UploadFTPTemplate(objZkeeper, int.Parse(device.DeviceId), lstUserInfo);
+          
+
+        }
+
+        private void btnUploadUserInfo_Click(object sender, EventArgs e)
+        {
+            addUser(devices[0]);
         }
     }
 }
