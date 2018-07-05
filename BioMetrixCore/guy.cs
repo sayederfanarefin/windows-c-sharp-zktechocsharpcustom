@@ -294,11 +294,12 @@ namespace BioMetrixCore
                 tempDevices.Add(device);
 
             }
+            reader.Close();
             for (int ii=0; ii < tempDevices.Count; ii++) {
                 await connectToDevice(tempDevices[ii], deviceConnected);
             }
             
-            reader.Close();
+            
             
         }
 
