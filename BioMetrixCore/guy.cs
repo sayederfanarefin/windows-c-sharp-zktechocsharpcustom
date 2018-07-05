@@ -212,7 +212,7 @@ namespace BioMetrixCore
 
                         }
 
-                        Console.WriteLine(theCommand);
+                       // Console.WriteLine(theCommand);
                         MySqlCommand command = conn.CreateCommand();
                         command.CommandText = theCommand;
                         Boolean mysqlInsertSuccess = false;
@@ -349,40 +349,70 @@ namespace BioMetrixCore
                         IEnumerator enumerator = lstUserInfo.GetEnumerator();
                         string theCommand = "INSERT INTO user_info (tmp_data, privilege, password, name, machine_number, i_flag, finger_index, enroll_number, enabled ) VALUES ";
                         int count = 0;
+                        int countShouldTheCommandBeExecuted = 0;
                         while (enumerator.MoveNext())
                         {
-                         
-
                             UserInfo item = (UserInfo)enumerator.Current;
-                            theCommand += "('" + item.Name + "', '" + item.Privelage + "', '" + item.Password + "', '" + item.Name + "', '" + item.MachineNumber + "', '" + item.iFlag + "', '" + item.FingerIndex + "', '" + item.EnrollNumber + "', '" + 0 + "')";
-                            count++;
-                            if (count < lstUserInfo.Count)
+
+                            string checkStatement = "SELECT * FROM user_info WHERE machine_number=" + item.MachineNumber + " AND enroll_number='" + item.EnrollNumber + "'";
+                           // Console.WriteLine(checkStatement);
+
+                            var cmd = new MySql.Data.MySqlClient.MySqlCommand(checkStatement, conn);
+                            var reader = cmd.ExecuteReader();
+
+                            int c = 0;
+                            while (reader.Read())
                             {
-                                theCommand += ", ";
+                                c++;
                             }
 
+                            reader.Close();
+
+                            if (c > 0)
+                            {
+
+                            }
+                            else {
+                                countShouldTheCommandBeExecuted++;
+
+                                int shit = 0;
+                                if (item.Enabled) { shit = 1; }
+                                theCommand += "('" + item.Name + "', '" + item.Privelage + "', '" + item.Password + "', '" + item.Name + "', '" + item.MachineNumber + "', '" + item.iFlag + "', '" + item.FingerIndex + "', '" + item.EnrollNumber + "', '" + shit + "')";
+                                count++;
+                                if (count < lstUserInfo.Count)
+                                {
+                                    theCommand += ", ";
+                                }
+
+                            }
+
+
                         }
 
-                        Console.WriteLine(theCommand);
-                        MySqlCommand command = conn.CreateCommand();
-                        command.CommandText = theCommand;
-                        Boolean mysqlInsertSuccess = false;
-                        try
-                        {
-                            int o = command.ExecuteNonQuery();
-                            mysqlInsertSuccess = true;
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(ex);
-                            mysqlInsertSuccess = false;
-                        }
 
-                        if (mysqlInsertSuccess)
-                        {
-                            clearedLog = manipulator.ClearGLog(objZkeeper, int.Parse(device.DeviceId));
+                        if (countShouldTheCommandBeExecuted > 0) {
+                           // Console.WriteLine(theCommand);
+                            MySqlCommand command = conn.CreateCommand();
+                            command.CommandText = theCommand;
+                            Boolean mysqlInsertSuccess = false;
+                            try
+                            {
+                                int o = command.ExecuteNonQuery();
+                                mysqlInsertSuccess = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine(ex);
+                                mysqlInsertSuccess = false;
+                            }
+
+                            if (mysqlInsertSuccess)
+                            {
+                                clearedLog = manipulator.ClearGLog(objZkeeper, int.Parse(device.DeviceId));
+                            }
+                            status = true;
                         }
-                        status = true;
+                        
                     }
                     else
                     {
