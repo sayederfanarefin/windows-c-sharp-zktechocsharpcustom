@@ -13,11 +13,9 @@ D:\Zktech\ZKTeco Using C#\BioMatrix\BioMetrixCore\obj\Debug\BioMetrixCore.pdb
 C:\Users\Sayed Erfan Arefin\Desktop\BioMetrix\BioMetrixCore\bin\Debug\BioMetrixCore.exe.config
 C:\Users\Sayed Erfan Arefin\Desktop\BioMetrix\BioMetrixCore\bin\Debug\BioMetrixCore.exe
 C:\Users\Sayed Erfan Arefin\Desktop\BioMetrix\BioMetrixCore\bin\Debug\BioMetrixCore.pdb
-C:\Users\Sayed Erfan Arefin\Desktop\BioMetrix\BioMetrixCore\obj\Debug\BioMetrixCore.csprojAssemblyReference.cache
 C:\Users\Sayed Erfan Arefin\Desktop\BioMetrix\BioMetrixCore\obj\Debug\Interop.zkemkeeper.dll
 C:\Users\Sayed Erfan Arefin\Desktop\BioMetrix\BioMetrixCore\obj\Debug\BioMetrixCore.csproj.ResolveComReference.cache
 C:\Users\Sayed Erfan Arefin\Desktop\BioMetrix\BioMetrixCore\obj\Debug\BioMetrixCore.DataEmpty.resources
-C:\Users\Sayed Erfan Arefin\Desktop\BioMetrix\BioMetrixCore\obj\Debug\BioMetrixCore.Master.resources
 C:\Users\Sayed Erfan Arefin\Desktop\BioMetrix\BioMetrixCore\obj\Debug\BioMetrixCore.Properties.Resources.resources
 C:\Users\Sayed Erfan Arefin\Desktop\BioMetrix\BioMetrixCore\obj\Debug\BioMetrixCore.csproj.GenerateResource.cache
 C:\Users\Sayed Erfan Arefin\Desktop\BioMetrix\BioMetrixCore\obj\Debug\BioMetrixCore.csproj.CoreCompileInputs.cache
@@ -50,3 +48,4 @@ C:\Users\Sayed Erfan Arefin\Desktop\BioMetrix\BioMetrixCore\bin\Debug\System.Web
 C:\Users\Sayed Erfan Arefin\Desktop\BioMetrix\BioMetrixCore\bin\Debug\WebMatrix.Data.xml
 C:\Users\Sayed Erfan Arefin\Desktop\BioMetrix\BioMetrixCore\bin\Debug\WebMatrix.WebData.xml
 C:\Users\Sayed Erfan Arefin\Desktop\BioMetrix\BioMetrixCore\obj\Debug\BioMetrixCore.csproj.CopyComplete
+C:\Users\Sayed Erfan Arefin\Desktop\BioMetrix\BioMetrixCore\obj\Debug\BioMetrixCore.csprojAssemblyReference.cache
