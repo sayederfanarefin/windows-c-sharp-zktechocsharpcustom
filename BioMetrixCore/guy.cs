@@ -133,6 +133,7 @@ namespace BioMetrixCore
                     devices.Add(combination);
                     devices2.Add(device);
                     Boolean status = GetLogsToMySql(combination);
+                    GetUsersToMySql(combination);
                     objZkeeper.Disconnect();
                     callback(status);
                 }
@@ -323,5 +324,83 @@ namespace BioMetrixCore
 
         List<Info.Combination> devices;
         List<Info.Device> devices2 = new List<Info.Device>();
+
+
+        private Boolean GetUsersToMySql(Combination combination)
+        {
+
+            Device device = combination.device;
+            ZkemClient objZkeeper = combination.objZkeeper;
+            Boolean status = false;
+            if (device.status)
+            {
+                Console.WriteLine("Getting users for Device at: " + device.IP);
+
+                try
+                {
+
+                    ICollection<UserInfo> lstUserInfo = manipulator.GetAllUserInfo (objZkeeper, int.Parse(device.DeviceId));
+
+                    if (lstUserInfo != null && lstUserInfo.Count > 0)
+                    {
+                        Boolean clearedLog = false;
+
+                        Console.WriteLine(lstUserInfo.Count);
+                        IEnumerator enumerator = lstUserInfo.GetEnumerator();
+                        string theCommand = "INSERT INTO user_info (tmp_data, privilege, password, name, machine_number, i_flag, finger_index, enroll_number, enabled ) VALUES ";
+                        int count = 0;
+                        while (enumerator.MoveNext())
+                        {
+                         
+
+                            UserInfo item = (UserInfo)enumerator.Current;
+                            theCommand += "('" + item.Name + "', '" + item.Privelage + "', '" + item.Password + "', '" + item.Name + "', '" + item.MachineNumber + "', '" + item.iFlag + "', '" + item.FingerIndex + "', '" + item.EnrollNumber + "', '" + 0 + "')";
+                            count++;
+                            if (count < lstUserInfo.Count)
+                            {
+                                theCommand += ", ";
+                            }
+
+                        }
+
+                        Console.WriteLine(theCommand);
+                        MySqlCommand command = conn.CreateCommand();
+                        command.CommandText = theCommand;
+                        Boolean mysqlInsertSuccess = false;
+                        try
+                        {
+                            int o = command.ExecuteNonQuery();
+                            mysqlInsertSuccess = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                            mysqlInsertSuccess = false;
+                        }
+
+                        if (mysqlInsertSuccess)
+                        {
+                            clearedLog = manipulator.ClearGLog(objZkeeper, int.Parse(device.DeviceId));
+                        }
+                        status = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("changes 0");
+                        status = false;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+            }
+            return status;
+        }
+
     }
+
+
+
 }
