@@ -13,8 +13,8 @@ namespace BioMetrixCore
     class guy
     {
         private System.Threading.Timer timer;
-        string connStr =
-                  "server=localhost;user=root;database=finger;port=3306;password=;SslMode=none";
+       // string connStr = "server=localhost;user=root;database=finger;port=3306;password=;SslMode=none";
+        string connStr = "server=178.128.52.75;user=root;database=sweet_hrm;port=3306;password=password;SslMode=none";
         MySqlConnection conn;
 
          DeviceManipulator manipulator = new DeviceManipulator();
@@ -197,7 +197,7 @@ namespace BioMetrixCore
                         
                         Console.WriteLine(lstMachineInfo.Count);
                         IEnumerator enumerator = lstMachineInfo.GetEnumerator();
-                        string theCommand = "INSERT INTO log (MachineNumber, IndRegID, DateTimeRecord ) VALUES ";
+                        string theCommand = "INSERT INTO logs (machine_number, ind_reg_id, date_time_record ) VALUES ";
                         int count = 0;
                         while (enumerator.MoveNext())
                         {
@@ -276,12 +276,12 @@ namespace BioMetrixCore
 
             while (reader.Read())
             {
-                String DeviceName = (String)reader["DeviceName"];
-                String DeviceId = (String)reader["DeviceId"];
-                String IP = (String)reader["IP"];
-                String Port = (String)reader["Port"];
-                String Mac = (String)reader["Mac"];
-                Int64 Id = (Int64)reader["Id"];
+                String DeviceName = (String)reader["device_name"];
+                String DeviceId = (String)reader["device_id"];
+                String IP = (String)reader["ip"];
+                String Port = (String)reader["port"];
+                String Mac = (String)reader["mac"];
+                Int64 Id = (Int64)reader["id"];
 
                 Info.Device device = new Info.Device();
                 device.DeviceId = DeviceId;
