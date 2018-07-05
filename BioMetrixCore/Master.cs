@@ -365,7 +365,9 @@ namespace BioMetrixCore
             var cmd = new MySql.Data.MySqlClient.MySqlCommand(query, conn);
             var reader = cmd.ExecuteReader();
             devices = new List<Info.Combination>();
-            
+
+            List<Info.Device> temp = new List<Info.Device>();
+
             while (reader.Read())
             {
                 String DeviceName = (String)reader["DeviceName"];
@@ -382,11 +384,18 @@ namespace BioMetrixCore
                 device.Port = Port;
                 device.Mac = Mac;
                 device.Id = Id;
-                
-                await connectToDevice(device, UpdateUi);
+
+                temp.Add(device);
                 
             }
+
             reader.Close();
+
+            for (int ii=0; ii < temp.Count;ii++) {
+                await connectToDevice(temp[ii], UpdateUi);
+            }
+            
+            
             UpdateUi(true);
         }
 
