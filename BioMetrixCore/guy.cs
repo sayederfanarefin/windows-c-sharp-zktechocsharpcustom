@@ -354,7 +354,7 @@ namespace BioMetrixCore
                         {
                             UserInfo item = (UserInfo)enumerator.Current;
 
-                            string checkStatement = "SELECT * FROM user_info WHERE machine_number=" + item.MachineNumber + " AND enroll_number='" + item.EnrollNumber + "'";
+                            string checkStatement = "SELECT * FROM user_info WHERE machine_number=" + item.MachineNumber + " AND enroll_number='" + item.EnrollNumber + "' AND tmp_data='" + item.TmpData + "'";
                            // Console.WriteLine(checkStatement);
 
                             var cmd = new MySql.Data.MySqlClient.MySqlCommand(checkStatement, conn);
@@ -366,18 +366,19 @@ namespace BioMetrixCore
                                 c++;
                             }
 
+
                             reader.Close();
 
                             if (c > 0)
                             {
-
+                                Console.WriteLine("----------------->");
                             }
                             else {
                                 countShouldTheCommandBeExecuted++;
 
                                 int shit = 0;
                                 if (item.Enabled) { shit = 1; }
-                                theCommand += "('" + item.Name + "', '" + item.Privelage + "', '" + item.Password + "', '" + item.Name + "', '" + item.MachineNumber + "', '" + item.iFlag + "', '" + item.FingerIndex + "', '" + item.EnrollNumber + "', '" + shit + "')";
+                                theCommand += "('" + item.TmpData + "', '" + item.Privelage + "', '" + item.Password + "', '" + item.Name + "', '" + item.MachineNumber + "', '" + item.iFlag + "', '" + item.FingerIndex + "', '" + item.EnrollNumber + "', '" + shit + "')";
                                 count++;
                                 if (count < lstUserInfo.Count)
                                 {
@@ -391,7 +392,7 @@ namespace BioMetrixCore
 
 
                         if (countShouldTheCommandBeExecuted > 0) {
-                           // Console.WriteLine(theCommand);
+                         //   Console.WriteLine(theCommand);
                             MySqlCommand command = conn.CreateCommand();
                             command.CommandText = theCommand;
                             Boolean mysqlInsertSuccess = false;
