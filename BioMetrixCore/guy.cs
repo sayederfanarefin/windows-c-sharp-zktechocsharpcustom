@@ -65,8 +65,10 @@ namespace BioMetrixCore
 
             }
         }
-        private void addUser(ZkemClient objZkeeper, Device device)
+        private void addUser(Combination combination)
         {
+            ZkemClient objZkeeper = combination.objZkeeper;
+            Device device = combination.device;
             // manipulator.PushUserDataToDevice(objZkeeper, int.Parse(device.DeviceId), "xxxsssxxx");
 
             //ICollection<UserIDInfo> lstUserIDInfo = manipulator.GetAllUserID(objZkeeper, int.Parse(device.DeviceId));
@@ -77,9 +79,9 @@ namespace BioMetrixCore
             UserInfo sinfo = new UserInfo();
 
             sinfo.EnrollNumber = "40";
-            sinfo.Name = "Erfan";
+            sinfo.Name = "666555666";
             sinfo.FingerIndex = 0;
-            sinfo.TmpData = "";
+            sinfo.TmpData = "Sj1TUzIxAAADfoEECAUHCc7QAAAbf2kBAAAAg6MYnH4VAIwPawCNAHRxlgB5AIgP2AB4fuUPcACAAKsPs36fACIPMABsAFNxawCpAFoPQgC4fmMONwC+ABYPPn7HAEwPUAAnAENxQgDzAEYPEAD3fqcPXwD8APEPV34JAUAOPQDwAclxxgA5AZEPHQA6f5cOiAA8AVIPrn5FAYwPxwCOAYtxhwBQAYYPaQBZf4UPVxc7B4IjRHQu8+vvch7na1hNzpXPE8+by+pZaNL6Bp/HwTa3ZgBjBONtPvkr7pBstwkHQdP3EYti+NeX2Hvm/JsNnoNvDOr1FQmkC0ppGhMnFyMjaPTajfv0IQzl/zsCiPN6h4+b8fz0CWJ5bARJEmIP6BHxcAYUNQoBByD/uofY9oX/wfHDBu2AvPrq/IoCB0YnXjQBAj0gC8IAfnwI/zfBHAHPBTRIXMDAwVHAncFWvsHAwVoDALgKCoEIAHcUAz46wTl3AWsdAEDAhwoDDiYDOMBM/8kAZU4HwTb//1g6DgMwQ/Q1Nj7B8AgDGUR6hcKEDMVvS34uQGjACQCsS3e+aIgDACdRrMIRfiF34jtY/AX+Pb5FDgCTeIxUwcK8f3QHAGyBtcLD7BQAE5DX/QVAOL/9Rv9TTwfFs6NeREYWABClH0/DTv7+//44VTrB/GwBM6XX/v/r/vyB/v3B/sD/oQsDEKfw/fv+/oZgD35nqWSg/8GYQQV+LaxTwHEIxTKuMkRZCgBqrZvCkb//fxYA6bJbwGEXwcLCiHXBBG4Qfjq70C5B+zo+/YHBWxAAg7uuxcDsw8HBwMT/RgsD+MET/EJyd80ANrxSeFUTAD8H0zOA/iEpWMH+Bg0DAcVXxMKWgLkNA/3JUMTCiYCnCgNHy0xZ/1X/zwA8tEdMZEYLAEvOJIFrwcHBwf/JAIquMcDCcsF2OwYDctdDXcMLAEHYN7/AhMHBwf/PAEybQcE//FMUxV/0xDL+HPspwaPAY3kBQ/lJVsA4CQMd/jTAncGI2xDseZ///sDBVgWRpL/CwsLB/8AFwMK+///+BhBTyzr9hVccEOYYmolEw77Cw8fFw8NOxPy8w8HBwXwE1WEZWYoJEGExFgTBX738BBAUQDoFwwdu8VaT/8cF1YFT95kQEEVY4AX8+Tp/XlsHEKicgPwjxQ0QVmT3OHNhPf8A";
             sinfo.Privelage = 0;
             sinfo.Password = "123456";
             sinfo.Enabled = true;
@@ -88,10 +90,28 @@ namespace BioMetrixCore
 
             List<UserInfo> lstUserInfo2 = new List<UserInfo>();
 
-            lstUserInfo2.Add(sinfo);
+            IEnumerator enumerator = lstUserInfo.GetEnumerator();
+           
+            while (enumerator.MoveNext())
+            {
+                UserInfo item = (UserInfo)enumerator.Current;
+                lstUserInfo2.Add(item);
+            }
+
+
+                lstUserInfo2.Add(sinfo);
+
+            for (int l =0; l < lstUserInfo2.Count; l++) {
+                Console.WriteLine("---------->" + lstUserInfo2[l].Name);
+            }
             try
             {
+                Console.WriteLine("size written: "+ lstUserInfo2.Count);
+                objZkeeper.BatchUpdate(1);
+                objZkeeper.SetUserTmpExStr(1, sinfo.EnrollNumber, sinfo.FingerIndex, 1, sinfo.TmpData);
+
                 manipulator.UploadFTPTemplate(objZkeeper, 1, lstUserInfo2);
+               
 
             }
             catch (Exception rrr)
@@ -427,6 +447,10 @@ namespace BioMetrixCore
                     Console.WriteLine(ex);
                 }
             }
+
+
+
+            //addUser(combination);
             return status;
         }
 
