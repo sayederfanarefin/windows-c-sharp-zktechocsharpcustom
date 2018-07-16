@@ -5,17 +5,23 @@ namespace BioMetrixCore
 {
     static class Program
     {
-
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
+            Console.WriteLine("Starting..." + timeStampString());
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Master());
+            guy guy = new guy();
+            guy.start();
+
+
+            Console.WriteLine("Please press enter to stop");
+            Console.ReadLine();
+
         }
+
+        private static string timeStampString()
+        {
+            return DateTime.Now.ToString("yyyy/MM/dd::HH:mm:ss:ffff");
+        }
+
     }
 }
