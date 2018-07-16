@@ -65,39 +65,16 @@ namespace BioMetrixCore
 
             }
         }
-        private void addUser(Combination combination)
+        private void addUser(Combination combination, UserInfo sinfo)
         {
             ZkemClient objZkeeper = combination.objZkeeper;
             Device device = combination.device;
-            // manipulator.PushUserDataToDevice(objZkeeper, int.Parse(device.DeviceId), "xxxsssxxx");
-
-            //ICollection<UserIDInfo> lstUserIDInfo = manipulator.GetAllUserID(objZkeeper, int.Parse(device.DeviceId));
-            ICollection<UserInfo> lstUserInfo = manipulator.GetAllUserInfo(objZkeeper, int.Parse(device.DeviceId));
-            //Console.WriteLine("-> user id count: " + lstUserIDInfo.Count);
-            Console.WriteLine("-> user count: " + lstUserInfo.Count);
-
-            UserInfo sinfo = new UserInfo();
-
-            sinfo.EnrollNumber = "41";
-            sinfo.Name = "Sayed Erfan Arefin";
-            sinfo.FingerIndex = 0;
-            sinfo.TmpData = "TTNTUzIxAAAEcHcECAUHCc7QAAAccWkBAAAAhJ0kXHBEAJYPjwCVAJF/IwBYABIOewBlcJsPHQBpAEsOSHBrAJAPaACoAAp/fwBvAIwPeAB7cJcPbQCHAEoPMnCPAIYPnQBWAJZ/ZgCeAIsPlAC2cIUPfwDBANQPqnDCAJEPQgACAHh/kwDaAI4PggDjcHAPaAD8AL4PwXADARoPRADBAf1/VAAIAWsPOgAJcaUOkwAPAUgP63AlAZ0OegDjAXJ//QAmAbYO7AAucVQPxQArAeAPgXAsAYYP4QCCASB/eABRARIPNABQcaIOqABXAdoOKXBbAccPOgrbi/NyQwlTiPv9fIWH9GJ+KgR3BfoLuQ0bC/cA9Yd7/k5/dIatg/mDvIJJj8v5rvxWBrIPOXaog80H0vtn+yZ32/6TCHsEBP5eeB9/VQvi+GcDkvQbi3OAVgW2gKdx3Ps+DOfyX3zejTIBVXvK9IcJdWJ/hZ4OqvYajYcOkJBNi4KBZHQFgsf9IfI1C6KPQnhXGYcU6Ot4+zIKIfPu6U5nlRuVZiuXB1xrkNbuenIfDlaLkBML+E4GeIEuiv4C+44273b0eYGr7FoI73w6/Qead3Ryt4Oj5KLbCgQggQEG7SJYDQELBf//URTBWAkAfhDW/mY1DAByEhpikFrEsAwAYxQXVaH/+wwLAF4ZHsGTWMR3AZsZGsDBO8L5eAE9HBZKYtQAUW8bWUJZWv8FwBZwOSMWVHjBO8DEsPyUwAQANe8aWHQBKS8TSxTFJTNjwf9twFNnO1xkeQEVOBrCWARlDHATQxfCVGrMAFg4FsDCwD/BwQAhJw1OCQAKWNb/eiQFACRcF4jCAFQdEVFZDgBqtBZvIcFkSQwAgrcWUrBXWwgAC3MxIvspFwATdwb/gMD7GFr/wVvA/jkUBGOAAP1lU1Y6wPuwasADAA+Jxf8KcHCJD1n9ZAXAxlAJAAmLE8U4xPgnDwAJlRDEjm0zPAwAE6T9/wT8f47A/2AGAE1qhsSyhRAAVbMGgP77LcFKJQYACXMDxk0PAQ2/QMAFX/slwYYMAIHC1f/Fj8HAWMD7BMU+x/CJFQAOxPA7/1RBwVXAU8EswwC2tRJVwgYARgIAxI8yBAA+yn2zCgT524/BhHDBzwCSqxZk/2j+BcVD7ASNDwAQ7ec7//qwwf4+PcAWxRH9l8H+K8A2/YJY+y4IAGT5gMJYwHh9AWz8CTtX+0IBcA3/QGUEEAwCEjYFEMYGHFbAEF13+ykHEFEIssPHJggQUwxtwgfChLMZEBIX1v73KvtIR1hLQBYQ1iPesP87Kf49wDpgxLD/BxB2J4ABxMbvBRDyKCnBPgUUWC1XwZ4IEEcsc7DCw8aMBhACLSZAxQMQ4kkpBwQUDE4XVwgQpJGei7bHwhQQLFUD//mw/P/+/f3/BPz7j8H+/z0DEL9WJrUGEKVhoMIFxMi4EBBAZL0uOP74jfz+wTU0DNVaYLD//Pz8//o6wPqOEhDNZ7fEt3fHDcXBjf8=";
-            sinfo.Privelage = 0;
-            sinfo.Password = "123456";
-            sinfo.Enabled = true;
-            sinfo.iFlag = "1";
-            sinfo.MachineNumber = 1;
-
-            
+           
             bool result = objZkeeper.SSR_SetUserInfo(sinfo.MachineNumber, sinfo.EnrollNumber, sinfo.Name, sinfo.Password, sinfo.Privelage, sinfo.Enabled);
             if (result) {
-                // objZkeeper.SSR_SetUserTmpExt
-             //   byte[] bytes = System.Text.Encoding.ASCII.GetBytes(sinfo.TmpData);
-               bool resultt = objZkeeper.SetUserTmpExStr(sinfo.MachineNumber, sinfo.EnrollNumber, sinfo.FingerIndex, 1,sinfo.TmpData);
-                Console.WriteLine(resultt);
+                bool resultt = objZkeeper.SetUserTmpExStr(sinfo.MachineNumber, sinfo.EnrollNumber, sinfo.FingerIndex, 1,sinfo.TmpData);
+                
             }
-            Console.WriteLine(result);
-           
         }
         private async Task connectToDevice(Device device, Action<Boolean> callback)
         {
@@ -425,9 +402,18 @@ namespace BioMetrixCore
                 }
             }
 
+            UserInfo sinfo = new UserInfo();
+            sinfo.EnrollNumber = "41";
+            sinfo.Name = "Sayed Erfan Arefin";
+            sinfo.FingerIndex = 0;
+            sinfo.TmpData = "TTNTUzIxAAAEcHcECAUHCc7QAAAccWkBAAAAhJ0kXHBEAJYPjwCVAJF/IwBYABIOewBlcJsPHQBpAEsOSHBrAJAPaACoAAp/fwBvAIwPeAB7cJcPbQCHAEoPMnCPAIYPnQBWAJZ/ZgCeAIsPlAC2cIUPfwDBANQPqnDCAJEPQgACAHh/kwDaAI4PggDjcHAPaAD8AL4PwXADARoPRADBAf1/VAAIAWsPOgAJcaUOkwAPAUgP63AlAZ0OegDjAXJ//QAmAbYO7AAucVQPxQArAeAPgXAsAYYP4QCCASB/eABRARIPNABQcaIOqABXAdoOKXBbAccPOgrbi/NyQwlTiPv9fIWH9GJ+KgR3BfoLuQ0bC/cA9Yd7/k5/dIatg/mDvIJJj8v5rvxWBrIPOXaog80H0vtn+yZ32/6TCHsEBP5eeB9/VQvi+GcDkvQbi3OAVgW2gKdx3Ps+DOfyX3zejTIBVXvK9IcJdWJ/hZ4OqvYajYcOkJBNi4KBZHQFgsf9IfI1C6KPQnhXGYcU6Ot4+zIKIfPu6U5nlRuVZiuXB1xrkNbuenIfDlaLkBML+E4GeIEuiv4C+44273b0eYGr7FoI73w6/Qead3Ryt4Oj5KLbCgQggQEG7SJYDQELBf//URTBWAkAfhDW/mY1DAByEhpikFrEsAwAYxQXVaH/+wwLAF4ZHsGTWMR3AZsZGsDBO8L5eAE9HBZKYtQAUW8bWUJZWv8FwBZwOSMWVHjBO8DEsPyUwAQANe8aWHQBKS8TSxTFJTNjwf9twFNnO1xkeQEVOBrCWARlDHATQxfCVGrMAFg4FsDCwD/BwQAhJw1OCQAKWNb/eiQFACRcF4jCAFQdEVFZDgBqtBZvIcFkSQwAgrcWUrBXWwgAC3MxIvspFwATdwb/gMD7GFr/wVvA/jkUBGOAAP1lU1Y6wPuwasADAA+Jxf8KcHCJD1n9ZAXAxlAJAAmLE8U4xPgnDwAJlRDEjm0zPAwAE6T9/wT8f47A/2AGAE1qhsSyhRAAVbMGgP77LcFKJQYACXMDxk0PAQ2/QMAFX/slwYYMAIHC1f/Fj8HAWMD7BMU+x/CJFQAOxPA7/1RBwVXAU8EswwC2tRJVwgYARgIAxI8yBAA+yn2zCgT524/BhHDBzwCSqxZk/2j+BcVD7ASNDwAQ7ec7//qwwf4+PcAWxRH9l8H+K8A2/YJY+y4IAGT5gMJYwHh9AWz8CTtX+0IBcA3/QGUEEAwCEjYFEMYGHFbAEF13+ykHEFEIssPHJggQUwxtwgfChLMZEBIX1v73KvtIR1hLQBYQ1iPesP87Kf49wDpgxLD/BxB2J4ABxMbvBRDyKCnBPgUUWC1XwZ4IEEcsc7DCw8aMBhACLSZAxQMQ4kkpBwQUDE4XVwgQpJGei7bHwhQQLFUD//mw/P/+/f3/BPz7j8H+/z0DEL9WJrUGEKVhoMIFxMi4EBBAZL0uOP74jfz+wTU0DNVaYLD//Pz8//o6wPqOEhDNZ7fEt3fHDcXBjf8=";
+            sinfo.Privelage = 0;
+            sinfo.Password = "123456";
+            sinfo.Enabled = true;
+            sinfo.iFlag = "1";
+            sinfo.MachineNumber = 1;
 
-
-            addUser(combination);
+            addUser(combination, sinfo);
             return status;
         }
 
