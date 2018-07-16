@@ -49,7 +49,7 @@ namespace BioMetrixCore
             }
             fileStream.Close();
             Console.WriteLine(config);
-            timer = new System.Threading.Timer(UpdateProperty, null, 10000, 10000);
+            timer = new System.Threading.Timer(UpdateProperty, null, 30000, 30000);
         }
 
         private string timeStampString()
@@ -109,6 +109,7 @@ namespace BioMetrixCore
         private async Task connectToDevice(Device device, Action<Boolean> callback)
         {
 
+
             if (device.officeCode.Equals(config) && PingDevice(device))
             {
                 ZkemClient objZkeeper = null;
@@ -138,7 +139,9 @@ namespace BioMetrixCore
 
                     if (!status && !status2)
                     {
-                        Console.WriteLine("Restart required. Device Restarting..." + device.DeviceId);
+                        Console.WriteLine("---------------------------->Restart required. Device Restarting..." + device.DeviceId);
+                        Boolean returned = objZkeeper.RestartDevice(Int32.Parse(device.DeviceId.Trim()));
+                        Console.WriteLine(returned);
                         //objZkeeper.RestartDevice(Int32.Parse(device.DeviceId));
                     }
                     objZkeeper.Disconnect();
@@ -346,92 +349,84 @@ namespace BioMetrixCore
             if (device.status)
             {
                 Console.WriteLine("Getting users for Device at: " + device.IP);
+                ICollection<UserInfo> lstUserInfo = manipulator.GetAllUserInfo(objZkeeper, int.Parse(device.DeviceId));
 
-                try
+                if (lstUserInfo != null && lstUserInfo.Count > 0)
                 {
+                    Boolean clearedLog = false;
 
-                    ICollection<UserInfo> lstUserInfo = manipulator.GetAllUserInfo(objZkeeper, int.Parse(device.DeviceId));
-
-                    if (lstUserInfo != null && lstUserInfo.Count > 0)
+                    Console.WriteLine(lstUserInfo.Count);
+                    IEnumerator enumerator = lstUserInfo.GetEnumerator();
+                    string theCommand = "INSERT INTO user_info (tmp_data, privilege, password, name, machine_number, i_flag, finger_index, enroll_number, enabled , officeCode) VALUES ";
+                    int count = 0;
+                    int countShouldTheCommandBeExecuted = 0;
+                    while (enumerator.MoveNext())
                     {
-                        Boolean clearedLog = false;
+                        UserInfo item = (UserInfo)enumerator.Current;
+                        string checkStatement = "SELECT * FROM user_info WHERE machine_number=" + item.MachineNumber + " AND enroll_number='" + item.EnrollNumber + "' AND tmp_data='" + item.TmpData + "'";
+                        // Console.WriteLine(checkStatement);
+                        var cmd = new MySql.Data.MySqlClient.MySqlCommand(checkStatement, conn);
+                        var reader = cmd.ExecuteReader();
+                        int c = 0;
+                        while (reader.Read())
+                        { c++; }
+                        reader.Close();
 
-                        Console.WriteLine(lstUserInfo.Count);
-                        IEnumerator enumerator = lstUserInfo.GetEnumerator();
-                        string theCommand = "INSERT INTO user_info (tmp_data, privilege, password, name, machine_number, i_flag, finger_index, enroll_number, enabled , officeCode) VALUES ";
-                        int count = 0;
-                        int countShouldTheCommandBeExecuted = 0;
-                        while (enumerator.MoveNext())
+                        if (c > 0)
                         {
-                            UserInfo item = (UserInfo)enumerator.Current;
-                            string checkStatement = "SELECT * FROM user_info WHERE machine_number=" + item.MachineNumber + " AND enroll_number='" + item.EnrollNumber + "' AND tmp_data='" + item.TmpData + "'";
-                            // Console.WriteLine(checkStatement);
-                            var cmd = new MySql.Data.MySqlClient.MySqlCommand(checkStatement, conn);
-                            var reader = cmd.ExecuteReader();
-                            int c = 0;
-                            while (reader.Read())
-                            { c++; }
-                            reader.Close();
+                            Console.WriteLine("----------------->");
+                        }
+                        else
+                        {
+                            countShouldTheCommandBeExecuted++;
 
-                            if (c > 0)
+                            int shit = 0;
+                            if (item.Enabled) { shit = 1; }
+                            theCommand += "('" + item.TmpData + "', '" + item.Privelage + "', '" + item.Password + "', '" + item.Name + "', '" + item.MachineNumber + "', '" + item.iFlag + "', '" + item.FingerIndex + "', '" + item.EnrollNumber + "', '" + shit + "', '" + config + "' )";
+                            count++;
+                            if (count < lstUserInfo.Count)
                             {
-                                Console.WriteLine("----------------->");
-                            }
-                            else
-                            {
-                                countShouldTheCommandBeExecuted++;
-
-                                int shit = 0;
-                                if (item.Enabled) { shit = 1; }
-                                theCommand += "('" + item.TmpData + "', '" + item.Privelage + "', '" + item.Password + "', '" + item.Name + "', '" + item.MachineNumber + "', '" + item.iFlag + "', '" + item.FingerIndex + "', '" + item.EnrollNumber + "', '" + shit + "', '" + config + "' )";
-                                count++;
-                                if (count < lstUserInfo.Count)
-                                {
-                                    theCommand += ", ";
-                                }
+                                theCommand += ", ";
                             }
                         }
-
-
-                        if (countShouldTheCommandBeExecuted > 0)
-                        {
-                            theCommand = theCommand.TrimEnd(' ');
-                            theCommand = theCommand.TrimEnd(',');
-                            // Console.WriteLine(theCommand);
-                            MySqlCommand command = conn.CreateCommand();
-                            command.CommandText = theCommand;
-                            Boolean mysqlInsertSuccess = false;
-                            try
-                            {
-                                int o = command.ExecuteNonQuery();
-                                mysqlInsertSuccess = true;
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine(ex);
-                                mysqlInsertSuccess = false;
-                            }
-
-                            if (mysqlInsertSuccess)
-                            {
-                                clearedLog = manipulator.ClearGLog(objZkeeper, int.Parse(device.DeviceId));
-                            }
-                            status = true;
-                        }
-
-                    }
-                    else
-                    {
-                        Console.WriteLine("changes 0");
-                        status = false;
                     }
 
 
+                    if (countShouldTheCommandBeExecuted > 0)
+                    {
+                        theCommand = theCommand.TrimEnd(' ');
+                        theCommand = theCommand.TrimEnd(',');
+                        // Console.WriteLine(theCommand);
+                        MySqlCommand command = conn.CreateCommand();
+                        command.CommandText = theCommand;
+                        Boolean mysqlInsertSuccess = false;
+                        try
+                        {
+                            int o = command.ExecuteNonQuery();
+                            mysqlInsertSuccess = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                            mysqlInsertSuccess = false;
+                        }
+
+                        if (mysqlInsertSuccess)
+                        {
+                            clearedLog = manipulator.ClearGLog(objZkeeper, int.Parse(device.DeviceId));
+                        }
+                        
+                    }
+                    status = true;
+
                 }
-                catch (Exception ex)
+                else
                 {
-                    Console.WriteLine(ex);
+                    Console.WriteLine("changes 0");
+                   // status = false;
                 }
+
+
 
                 pushToMachine(combination);
 
@@ -467,7 +462,7 @@ namespace BioMetrixCore
                 sinfo.Password = (string)reader["password"];
 
                 var obj = (object)(sbyte)reader["enabled"];
-                var enabled = (int)(sbyte)obj; 
+                var enabled = (int)(sbyte)obj;
 
                 if (enabled == 1) { sinfo.Enabled = true; } else { sinfo.Enabled = false; }
 
@@ -495,7 +490,8 @@ namespace BioMetrixCore
                     UserInfo item = (UserInfo)enamurator.Current;
                     if (item.EnrollNumber.Equals(tempUser.EnrollNumber) && item.TmpData.Equals(tempUser.TmpData))
                     {
-                         isUserInDevice = true;
+                        // isUserInDevice = true;
+                        Console.WriteLine("Updating " + tempUser.Name + " for device: " + combination.device.IP);
                         break;
                     }
                 }
