@@ -95,7 +95,7 @@ namespace BioMetrixCore
         }
         private void addUser(Combination combination, UserInfo sinfo)
         {
-            Console.WriteLine("Adding user "+sinfo.Name + "to Device: " + combination.device.IP);
+            Console.WriteLine("Adding user " + sinfo.Name + "to Device: " + combination.device.IP);
             ZkemClient objZkeeper = combination.objZkeeper;
             Device device = combination.device;
 
@@ -136,7 +136,8 @@ namespace BioMetrixCore
                     Boolean status = GetLogsToMySql(combination);
                     Boolean status2 = GetUsersToMySql(combination);
 
-                    if (!status && !status2) {
+                    if (!status && !status2)
+                    {
                         Console.WriteLine("Restart required. Device Restarting..." + device.DeviceId);
                         //objZkeeper.RestartDevice(Int32.Parse(device.DeviceId));
                     }
@@ -364,7 +365,7 @@ namespace BioMetrixCore
                         {
                             UserInfo item = (UserInfo)enumerator.Current;
                             string checkStatement = "SELECT * FROM user_info WHERE machine_number=" + item.MachineNumber + " AND enroll_number='" + item.EnrollNumber + "' AND tmp_data='" + item.TmpData + "'";
-                           // Console.WriteLine(checkStatement);
+                            // Console.WriteLine(checkStatement);
                             var cmd = new MySql.Data.MySqlClient.MySqlCommand(checkStatement, conn);
                             var reader = cmd.ExecuteReader();
                             int c = 0;
@@ -382,7 +383,7 @@ namespace BioMetrixCore
 
                                 int shit = 0;
                                 if (item.Enabled) { shit = 1; }
-                                theCommand += "('" + item.TmpData + "', '" + item.Privelage + "', '" + item.Password + "', '" + item.Name + "', '" + item.MachineNumber + "', '" + item.iFlag + "', '" + item.FingerIndex + "', '" + item.EnrollNumber + "', '" + shit + "', '" + config + " )";
+                                theCommand += "('" + item.TmpData + "', '" + item.Privelage + "', '" + item.Password + "', '" + item.Name + "', '" + item.MachineNumber + "', '" + item.iFlag + "', '" + item.FingerIndex + "', '" + item.EnrollNumber + "', '" + shit + "', '" + config + "' )";
                                 count++;
                                 if (count < lstUserInfo.Count)
                                 {
@@ -396,7 +397,7 @@ namespace BioMetrixCore
                         {
                             theCommand = theCommand.TrimEnd(' ');
                             theCommand = theCommand.TrimEnd(',');
-                            Console.WriteLine(theCommand);
+                            // Console.WriteLine(theCommand);
                             MySqlCommand command = conn.CreateCommand();
                             command.CommandText = theCommand;
                             Boolean mysqlInsertSuccess = false;
@@ -451,28 +452,29 @@ namespace BioMetrixCore
             var reader = cmd.ExecuteReader();
             List<UserInfo> usersFromServer = new List<UserInfo>();
 
-            
+
             while (reader.Read())
             {
                 UserInfo sinfo = new UserInfo();
                 sinfo.EnrollNumber = (string)reader["enroll_number"];
-               sinfo.Name = (string)reader["name"];
+                sinfo.Name = (string)reader["name"];
                 sinfo.FingerIndex = (int)reader["finger_index"];
-                sinfo.TmpData = (string)reader["tmp_data"]; //"TTNTUzIxAAAEcHcECAUHCc7QAAAccWkBAAAAhJ0kXHBEAJYPjwCVAJF/IwBYABIOewBlcJsPHQBpAEsOSHBrAJAPaACoAAp/fwBvAIwPeAB7cJcPbQCHAEoPMnCPAIYPnQBWAJZ/ZgCeAIsPlAC2cIUPfwDBANQPqnDCAJEPQgACAHh/kwDaAI4PggDjcHAPaAD8AL4PwXADARoPRADBAf1/VAAIAWsPOgAJcaUOkwAPAUgP63AlAZ0OegDjAXJ//QAmAbYO7AAucVQPxQArAeAPgXAsAYYP4QCCASB/eABRARIPNABQcaIOqABXAdoOKXBbAccPOgrbi/NyQwlTiPv9fIWH9GJ+KgR3BfoLuQ0bC/cA9Yd7/k5/dIatg/mDvIJJj8v5rvxWBrIPOXaog80H0vtn+yZ32/6TCHsEBP5eeB9/VQvi+GcDkvQbi3OAVgW2gKdx3Ps+DOfyX3zejTIBVXvK9IcJdWJ/hZ4OqvYajYcOkJBNi4KBZHQFgsf9IfI1C6KPQnhXGYcU6Ot4+zIKIfPu6U5nlRuVZiuXB1xrkNbuenIfDlaLkBML+E4GeIEuiv4C+44273b0eYGr7FoI73w6/Qead3Ryt4Oj5KLbCgQggQEG7SJYDQELBf//URTBWAkAfhDW/mY1DAByEhpikFrEsAwAYxQXVaH/+wwLAF4ZHsGTWMR3AZsZGsDBO8L5eAE9HBZKYtQAUW8bWUJZWv8FwBZwOSMWVHjBO8DEsPyUwAQANe8aWHQBKS8TSxTFJTNjwf9twFNnO1xkeQEVOBrCWARlDHATQxfCVGrMAFg4FsDCwD/BwQAhJw1OCQAKWNb/eiQFACRcF4jCAFQdEVFZDgBqtBZvIcFkSQwAgrcWUrBXWwgAC3MxIvspFwATdwb/gMD7GFr/wVvA/jkUBGOAAP1lU1Y6wPuwasADAA+Jxf8KcHCJD1n9ZAXAxlAJAAmLE8U4xPgnDwAJlRDEjm0zPAwAE6T9/wT8f47A/2AGAE1qhsSyhRAAVbMGgP77LcFKJQYACXMDxk0PAQ2/QMAFX/slwYYMAIHC1f/Fj8HAWMD7BMU+x/CJFQAOxPA7/1RBwVXAU8EswwC2tRJVwgYARgIAxI8yBAA+yn2zCgT524/BhHDBzwCSqxZk/2j+BcVD7ASNDwAQ7ec7//qwwf4+PcAWxRH9l8H+K8A2/YJY+y4IAGT5gMJYwHh9AWz8CTtX+0IBcA3/QGUEEAwCEjYFEMYGHFbAEF13+ykHEFEIssPHJggQUwxtwgfChLMZEBIX1v73KvtIR1hLQBYQ1iPesP87Kf49wDpgxLD/BxB2J4ABxMbvBRDyKCnBPgUUWC1XwZ4IEEcsc7DCw8aMBhACLSZAxQMQ4kkpBwQUDE4XVwgQpJGei7bHwhQQLFUD//mw/P/+/f3/BPz7j8H+/z0DEL9WJrUGEKVhoMIFxMi4EBBAZL0uOP74jfz+wTU0DNVaYLD//Pz8//o6wPqOEhDNZ7fEt3fHDcXBjf8=";
-                                                             sinfo.Privelage = (int)reader["privilege"];
-                                                             sinfo.Password = (string)reader["password"];
-                // int enabled = (int)reader["enabled"];
+                sinfo.TmpData = (string)reader["tmp_data"];
+
+
+
+                sinfo.Privelage = (int)reader["privilege"];
+                sinfo.Password = (string)reader["password"];
 
                 var obj = (object)(sbyte)reader["enabled"];
-                var enabled = (int)(sbyte)obj;  // okay: object (cast)-> sbyte (conversion)-> int
-                //var i2 = (int)obj;
+                var enabled = (int)(sbyte)obj; 
 
-                  if (enabled == 1) { sinfo.Enabled = true; } else { sinfo.Enabled = false; }
+                if (enabled == 1) { sinfo.Enabled = true; } else { sinfo.Enabled = false; }
 
-               // sinfo.Enabled = true;
-                  sinfo.iFlag = (string)reader["i_flag"];
-                  sinfo.MachineNumber = (int)reader["machine_number"];
-                  
+                // sinfo.Enabled = true;
+                sinfo.iFlag = (string)reader["i_flag"];
+                sinfo.MachineNumber = (int)reader["machine_number"];
+
                 usersFromServer.Add(sinfo);
             }
 
@@ -484,7 +486,7 @@ namespace BioMetrixCore
             {
                 UserInfo tempUser = usersFromServer[k];
 
-                Console.WriteLine("--------------------> User from server: "+ tempUser.Name);
+                Console.WriteLine("--------------------> User from server: " + tempUser.Name);
                 Boolean isUserInDevice = false;
 
                 IEnumerator enamurator = userFromDevice.GetEnumerator();
@@ -493,7 +495,7 @@ namespace BioMetrixCore
                     UserInfo item = (UserInfo)enamurator.Current;
                     if (item.EnrollNumber.Equals(tempUser.EnrollNumber) && item.TmpData.Equals(tempUser.TmpData))
                     {
-                       // isUserInDevice = true;
+                         isUserInDevice = true;
                         break;
                     }
                 }
@@ -501,8 +503,9 @@ namespace BioMetrixCore
                 {
                     addUser(combination, tempUser);
                 }
-                else {
-                    Console.WriteLine("I will not add the user: " +tempUser.Name);
+                else
+                {
+                    Console.WriteLine("I will not add the user: " + tempUser.Name);
                 }
 
 
