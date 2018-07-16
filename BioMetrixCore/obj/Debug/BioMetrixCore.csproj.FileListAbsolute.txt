@@ -135,3 +135,4 @@ C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCo
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.csproj.CopyComplete
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.exe
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.pdb
+C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\config.txt

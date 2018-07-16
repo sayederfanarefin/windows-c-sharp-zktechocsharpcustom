@@ -16,5 +16,7 @@ namespace BioMetrixCore.Info
         public Int64 Id { get; set; }
         public DateTime updatedAt { get; set; }
         public Boolean status { get; set; }
+
+        public String officeCode { get; set; }
     }
 }
