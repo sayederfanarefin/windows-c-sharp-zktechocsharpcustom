@@ -13,7 +13,11 @@ namespace BioMetrixCore
 {
     class guy
     {
-        private System.Threading.Timer timer;
+        // private System.Threading.Timer timer;
+
+        //178.128.223.188
+
+
         // string connStr = "server=localhost;user=root;database=finger;port=3306;password=;SslMode=none";
         string connStr = "server=178.128.52.75;user=root;database=sweet_hrm;port=3306;password=password;SslMode=none";
         MySqlConnection conn;
@@ -24,49 +28,14 @@ namespace BioMetrixCore
         DeviceManipulator manipulator = new DeviceManipulator();
 
 
-        public void start()
-        {
-            var fileStream = new FileStream(@"config.txt", FileMode.Open, FileAccess.Read);
-            using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
-            {
-                config = streamReader.ReadToEnd();
-            }
-            if (config.Length < 2)
-            {
-                var fileStream2 = new FileStream(@"config.txt", FileMode.Open, FileAccess.ReadWrite);
-                Console.WriteLine("Please enter the office code:");
-                String officeCode = Console.ReadLine();
-                byte[] officeCodeBytes = new UTF8Encoding(true).GetBytes(officeCode);
-
-                fileStream2.Write(officeCodeBytes, 0, officeCodeBytes.Length);
-                fileStream2.Close();
-                fileStream.Close();
-                fileStream = new FileStream(@"config.txt", FileMode.Open, FileAccess.Read);
-            }
-            using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
-            {
-                config = streamReader.ReadToEnd();
-            }
-            fileStream.Close();
-            Console.WriteLine(config);
-            timer = new System.Threading.Timer(UpdateProperty, null, 30000, 30000);
-        }
+        
 
         private string timeStampString()
         {
             return DateTime.Now.ToString("yyyy/MM/dd::HH:mm:ss:ffff");
         }
 
-        private void UpdateProperty(object state)
-        {
-            lock (this)
-            {
-
-                Console.WriteLine(timeStampString());
-
-                init();
-            }
-        }
+       
 
         private Boolean connectToMySql()
         {
@@ -135,15 +104,15 @@ namespace BioMetrixCore
                     devices.Add(combination);
                     devices2.Add(device);
                     Boolean status = GetLogsToMySql(combination);
-                    Boolean status2 = GetUsersToMySql(combination);
+                    //Boolean status2 = GetUsersToMySql(combination);
 
-                    if (!status && !status2)
-                    {
-                        Console.WriteLine("---------------------------->Restart required. Device Restarting..." + device.DeviceId);
-                        Boolean returned = objZkeeper.RestartDevice(Int32.Parse(device.DeviceId.Trim()));
-                        Console.WriteLine(returned);
+                   // if (!status && !status2)
+                    //{
+                     //   Console.WriteLine("---------------------------->Restart required. Device Restarting..." + device.DeviceId);
+                       // Boolean returned = objZkeeper.RestartDevice(Int32.Parse(device.DeviceId.Trim()));
+                        //Console.WriteLine(returned);
                         //objZkeeper.RestartDevice(Int32.Parse(device.DeviceId));
-                    }
+                    //}
                     objZkeeper.Disconnect();
                     callback(status);
                 }
@@ -326,8 +295,10 @@ namespace BioMetrixCore
 
         }
 
-        private void init()
+        public void init(String config)
         {
+            Console.WriteLine(timeStampString());
+            this.config = config;
             while (!connectToMySql())
             {
                 Thread.Sleep(500);
@@ -469,7 +440,7 @@ namespace BioMetrixCore
                 // sinfo.Enabled = true;
                 sinfo.iFlag = (string)reader["i_flag"];
                 sinfo.MachineNumber = (int)reader["machine_number"];
-
+             //   reader.Close();
                 usersFromServer.Add(sinfo);
             }
 
@@ -490,8 +461,8 @@ namespace BioMetrixCore
                     UserInfo item = (UserInfo)enamurator.Current;
                     if (item.EnrollNumber.Equals(tempUser.EnrollNumber) && item.TmpData.Equals(tempUser.TmpData))
                     {
-                        // isUserInDevice = true;
-                        Console.WriteLine("Updating " + tempUser.Name + " for device: " + combination.device.IP);
+                         isUserInDevice = true;
+                       // Console.WriteLine("Updating " + tempUser.Name + " for device: " + combination.device.IP);
                         break;
                     }
                 }
@@ -507,6 +478,8 @@ namespace BioMetrixCore
 
             }
 
+
+            reader.Close();
         }
 
 

@@ -123,7 +123,6 @@ C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\System.Web.
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\System.Web.WebPages.Razor.xml
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\WebMatrix.Data.xml
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\WebMatrix.WebData.xml
-C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.csprojAssemblyReference.cache
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\Interop.zkemkeeper.dll
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.csproj.ResolveComReference.cache
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.DataEmpty.resources
@@ -136,3 +135,4 @@ C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCo
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.exe
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.pdb
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\config.txt
+C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.csprojAssemblyReference.cache
