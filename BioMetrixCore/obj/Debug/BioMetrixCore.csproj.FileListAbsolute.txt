@@ -136,7 +136,6 @@ C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\
 C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.csproj.CopyComplete
 C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.exe
 C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.pdb
-C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\config.txt
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\BioMetrixCore.exe.config
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\BioMetrixCore.exe.manifest
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\BioMetrixCore.application
@@ -180,3 +179,19 @@ C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCo
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.exe
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.pdb
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.csprojAssemblyReference.cache
+C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\Microsoft.CSharp.dll
+C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\MySql.Data.EntityFramework.dll
+C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\MySQL.Data.EntityFrameworkCore.Design.dll
+C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\MySQL.Data.EntityFrameworkCore.dll
+C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\System.ComponentModel.DataAnnotations.dll
+C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\System.ComponentModel.dll
+C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\System.Configuration.dll
+C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\System.Configuration.Install.dll
+C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\System.dll
+C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\MySql.Data.xml
+C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\MySql.Data.EntityFramework.xml
+C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\MySQL.Data.EntityFrameworkCore.xml
+C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\MySQL.Data.EntityFrameworkCore.Design.xml
+C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.exe.config
+C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\App.config
+C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\config.txt

@@ -37,11 +37,12 @@ namespace BioMetrixCore
         static void Main(string[] args)
         {
             Console.WriteLine("Starting..." + timeStampString());
+            try
+            {
 
-           /*
 
-            var fileStream = new FileStream(@"config.txt", FileMode.Open, FileAccess.Read);
-            using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
+                var fileStream = new FileStream(@"config.txt", FileMode.Open, FileAccess.Read);
+            using (var streamReader = new StreamReader(fileStream, Encoding.UTF8, true, 102400, false))
             {
                 config = streamReader.ReadToEnd();
                 streamReader.Close();
@@ -49,23 +50,33 @@ namespace BioMetrixCore
             
             if (config.Length < 2)
             {
-                var fileStream2 = new FileStream(@"config.txt", FileMode.Open, FileAccess.ReadWrite);
-                Console.WriteLine("Please enter the office code:");
-                String officeCode = Console.ReadLine();
-                byte[] officeCodeBytes = new UTF8Encoding(true).GetBytes(officeCode);
+               
 
-                fileStream2.Write(officeCodeBytes, 0, officeCodeBytes.Length);
-                fileStream2.Close();
-                fileStream.Close();
-                fileStream = new FileStream(@"config.txt", FileMode.Open, FileAccess.Read);
+                    var fileStream2 = new FileStream(@"config.txt", FileMode.Open, FileAccess.ReadWrite);
+                    Console.WriteLine("Please enter the office code:");
+                    String officeCode = Console.ReadLine();
+                    byte[] officeCodeBytes = new UTF8Encoding(true).GetBytes(officeCode);
+
+                    fileStream2.Write(officeCodeBytes, 0, officeCodeBytes.Length);
+                    fileStream2.Close();
+                    fileStream.Close();
+                    fileStream = new FileStream(@"config.txt", FileMode.Open, FileAccess.Read);
+
+               
+               
             }
             using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
             {
                 config = streamReader.ReadToEnd();
+                streamReader.Close();
             }
             fileStream.Close();
-            */
-                config = "tworth";
+
+            } catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            //    config = "tworth";
             Console.WriteLine("Configured with:" + config);
 
             System.Timers.Timer aTimer = new System.Timers.Timer();
