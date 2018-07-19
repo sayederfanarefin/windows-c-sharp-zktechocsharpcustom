@@ -136,3 +136,47 @@ C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCo
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.pdb
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\config.txt
 C:\Users\Suraiya\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.csprojAssemblyReference.cache
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\config.txt
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\BioMetrixCore.exe.config
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\BioMetrixCore.exe.manifest
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\BioMetrixCore.application
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\BioMetrixCore.exe
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\BioMetrixCore.pdb
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\EntityFramework.dll
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\Google.Protobuf.dll
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\Microsoft.Web.Infrastructure.dll
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\MySql.Data.dll
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\MySql.Data.Entity.EF6.dll
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\MySql.Web.dll
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\System.Web.Helpers.dll
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\System.Web.Razor.dll
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\System.Web.WebPages.Deployment.dll
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\System.Web.WebPages.dll
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\System.Web.WebPages.Razor.dll
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\WebMatrix.Data.dll
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\WebMatrix.WebData.dll
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\EntityFramework.xml
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\Google.Protobuf.xml
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\MySql.Data.Entity.EF6.xml
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\MySql.Web.xml
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\System.Web.Helpers.xml
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\System.Web.Razor.xml
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\System.Web.WebPages.xml
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\System.Web.WebPages.Deployment.xml
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\System.Web.WebPages.Razor.xml
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\WebMatrix.Data.xml
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\bin\Debug\WebMatrix.WebData.xml
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.csprojAssemblyReference.cache
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\Interop.zkemkeeper.dll
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.csproj.ResolveComReference.cache
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.DataEmpty.resources
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.Properties.Resources.resources
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.csproj.GenerateResource.cache
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.csproj.CoreCompileInputs.cache
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.exe.manifest
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.application
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.csproj.CopyComplete
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.exe
+C:\Users\Sayed Erfan Arefin\Desktop\zktechocsharpcustom\BioMetrixCore\obj\Debug\BioMetrixCore.pdb

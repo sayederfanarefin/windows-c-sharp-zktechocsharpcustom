@@ -19,6 +19,7 @@ namespace BioMetrixCore
                 {
                     guy g = new guy();
                     g.init(config);
+                   
                 }
                 catch (Exception exception) {
                     Console.WriteLine("I got an exception: "+ exception);
@@ -67,11 +68,11 @@ namespace BioMetrixCore
             Console.WriteLine("Configured with:" + config);
 
             System.Timers.Timer aTimer = new System.Timers.Timer();
+            aTimer.AutoReset = false;
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             aTimer.Interval = 30000;
             aTimer.Enabled = true;
-
-
+            
             Console.WriteLine("Please press enter to stop");
             Console.ReadLine();
 

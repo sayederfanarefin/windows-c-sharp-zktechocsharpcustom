@@ -104,15 +104,15 @@ namespace BioMetrixCore
                     devices.Add(combination);
                     devices2.Add(device);
                     Boolean status = GetLogsToMySql(combination);
-                    //Boolean status2 = GetUsersToMySql(combination);
+                    Boolean status2 = GetUsersToMySql(combination);
 
-                   // if (!status && !status2)
-                    //{
-                     //   Console.WriteLine("---------------------------->Restart required. Device Restarting..." + device.DeviceId);
-                       // Boolean returned = objZkeeper.RestartDevice(Int32.Parse(device.DeviceId.Trim()));
-                        //Console.WriteLine(returned);
-                        //objZkeeper.RestartDevice(Int32.Parse(device.DeviceId));
-                    //}
+                    if (!status && !status2)
+                    {
+                        Console.WriteLine("---------------------------->Restart required. Device Restarting..." + device.DeviceId);
+                        Boolean returned = objZkeeper.RestartDevice(Int32.Parse(device.DeviceId.Trim()));
+                        Console.WriteLine(returned);
+                       objZkeeper.RestartDevice(Int32.Parse(device.DeviceId));
+                    }
                     objZkeeper.Disconnect();
                     callback(status);
                 }
