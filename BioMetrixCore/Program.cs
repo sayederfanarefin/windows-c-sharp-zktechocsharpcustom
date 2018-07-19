@@ -38,7 +38,7 @@ namespace BioMetrixCore
         {
             Console.WriteLine("Starting..." + timeStampString());
 
-           
+           /*
 
             var fileStream = new FileStream(@"config.txt", FileMode.Open, FileAccess.Read);
             using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
@@ -64,13 +64,14 @@ namespace BioMetrixCore
                 config = streamReader.ReadToEnd();
             }
             fileStream.Close();
-            
+            */
+                config = "tworth";
             Console.WriteLine("Configured with:" + config);
 
             System.Timers.Timer aTimer = new System.Timers.Timer();
-            aTimer.AutoReset = false;
+            aTimer.AutoReset = true;
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-            aTimer.Interval = 30000;
+            aTimer.Interval = 90000;
             aTimer.Enabled = true;
             
             Console.WriteLine("Please press enter to stop");

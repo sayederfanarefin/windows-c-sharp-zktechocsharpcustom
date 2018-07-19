@@ -13,13 +13,17 @@ namespace BioMetrixCore
 {
     class guy
     {
-        // private System.Threading.Timer timer;
+
 
         //178.128.223.188
 
 
         // string connStr = "server=localhost;user=root;database=finger;port=3306;password=;SslMode=none";
-        string connStr = "server=178.128.52.75;user=root;database=sweet_hrm;port=3306;password=password;SslMode=none";
+        //dev
+        //  string connStr = "server=178.128.52.75;user=root;database=sweet_hrm;port=3306;password=password;SslMode=none";
+
+        //production
+        string connStr = "server=178.128.223.188;user=root;database=sweet_hrm;port=3306;password=Sweetitech#;SslMode=none";
         MySqlConnection conn;
 
         string config = "";
@@ -75,7 +79,7 @@ namespace BioMetrixCore
 
             }
         }
-        private async Task connectToDevice(Device device, Action<Boolean> callback)
+        private void connectToDevice(Device device)
         {
 
 
@@ -114,7 +118,7 @@ namespace BioMetrixCore
                        objZkeeper.RestartDevice(Int32.Parse(device.DeviceId));
                     }
                     objZkeeper.Disconnect();
-                    callback(status);
+                  
                 }
                 catch (Exception ex)
                 {
@@ -246,7 +250,7 @@ namespace BioMetrixCore
         }
 
 
-        private async void getDevices()
+        private  void getDevices()
         {
             string query = "SELECT * FROM devices where officeCode = '" + config + "'";
 
@@ -281,7 +285,7 @@ namespace BioMetrixCore
             reader.Close();
             for (int ii = 0; ii < tempDevices.Count; ii++)
             {
-                await connectToDevice(tempDevices[ii], deviceConnected);
+                 connectToDevice(tempDevices[ii]);
             }
 
 
