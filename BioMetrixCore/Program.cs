@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.IO;
 using System.Text;
 using System.Timers;
@@ -47,21 +48,18 @@ namespace BioMetrixCore
                 //config = streamReader.ReadToEnd();
                 //streamReader.Close();
 
-                 config = System.IO.File.ReadAllText(@"config.txt");
+                 config = System.IO.File.ReadAllText(Application.StartupPath + "\\config.txt");
 
 
                 if (config.Length < 2)
             {
-                   
-
-                         
                     Console.WriteLine("Please enter the office code:");
                     String officeCode = Console.ReadLine();
-                    System.IO.File.WriteAllText(@"config.txt", officeCode);
-
+                    System.IO.File.WriteAllText(Application.StartupPath+"\\config.txt", officeCode);
+                    RegisterInStartup();
                 }
                
-                config = System.IO.File.ReadAllText(@"config.txt");
+                config = System.IO.File.ReadAllText(Application.StartupPath + "\\config.txt");
 
                 //fileStream.Close();
 
@@ -102,6 +100,19 @@ namespace BioMetrixCore
         private static string timeStampString()
         {
             return DateTime.Now.ToString("yyyy/MM/dd::HH:mm:ss:ffff");
+        }
+
+        private static void RegisterInStartup()
+        {
+            RegistryKey registryKey = Registry.CurrentUser.OpenSubKey
+                    ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+            Console.WriteLine(Application.ExecutablePath);
+            Console.WriteLine(Application.ProductName);
+            Console.WriteLine(Application.CompanyName);
+            registryKey.SetValue(Application.ProductName, Application.ExecutablePath);
+
+
         }
 
     }
