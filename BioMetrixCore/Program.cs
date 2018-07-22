@@ -41,36 +41,29 @@ namespace BioMetrixCore
             {
 
 
-                var fileStream = new FileStream(@"config.txt", FileMode.Open, FileAccess.Read);
-            using (var streamReader = new StreamReader(fileStream, Encoding.UTF8, true, 102400, false))
-            {
-                config = streamReader.ReadToEnd();
-                streamReader.Close();
-            }
-            
-            if (config.Length < 2)
-            {
-               
+               // var fileStream = new FileStream(@"config.txt", FileMode.Open, FileAccess.Read);
+                
+               // var streamReader = new StreamReader(fileStream, Encoding.UTF8);
+                //config = streamReader.ReadToEnd();
+                //streamReader.Close();
 
-                    var fileStream2 = new FileStream(@"config.txt", FileMode.Open, FileAccess.ReadWrite);
+                 config = System.IO.File.ReadAllText(@"config.txt");
+
+
+                if (config.Length < 2)
+            {
+                   
+
+                         
                     Console.WriteLine("Please enter the office code:");
                     String officeCode = Console.ReadLine();
-                    byte[] officeCodeBytes = new UTF8Encoding(true).GetBytes(officeCode);
+                    System.IO.File.WriteAllText(@"config.txt", officeCode);
 
-                    fileStream2.Write(officeCodeBytes, 0, officeCodeBytes.Length);
-                    fileStream2.Close();
-                    fileStream.Close();
-                    fileStream = new FileStream(@"config.txt", FileMode.Open, FileAccess.Read);
+                }
+               
+                config = System.IO.File.ReadAllText(@"config.txt");
 
-               
-               
-            }
-            using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
-            {
-                config = streamReader.ReadToEnd();
-                streamReader.Close();
-            }
-            fileStream.Close();
+                //fileStream.Close();
 
             } catch (Exception e)
             {

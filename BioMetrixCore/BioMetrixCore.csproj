@@ -13,7 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>C:\Users\Suraiya\Desktop\</PublishUrl>
+    <PublishUrl>C:\Users\Suraiya\Desktop\fma\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -25,7 +25,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ProductName>HR Module</ProductName>
     <PublisherName>SweetiTech</PublisherName>
-    <ApplicationRevision>22</ApplicationRevision>
+    <ApplicationRevision>26</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -154,7 +154,9 @@
     <Compile Include="Controls\DataEmpty.Designer.cs">
       <DependentUpon>DataEmpty.cs</DependentUpon>
     </Compile>
-    <Compile Include="guy.cs" />
+    <Compile Include="guy.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Info\Combination.cs" />
     <Compile Include="Info\Device.cs" />
     <Compile Include="Info\UserIDInfo.cs" />
@@ -200,9 +202,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="config.txt">
+    <Content Include="config.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
+    </Content>
     <Content Include="dlls\zkemkeeper.dll" />
     <None Include="Resources\noFileIcon.png" />
   </ItemGroup>
