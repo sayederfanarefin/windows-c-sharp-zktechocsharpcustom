@@ -20,7 +20,7 @@ namespace BioMetrixCore
 
         // string connStr = "server=localhost;user=root;database=finger;port=3306;password=;SslMode=none";
         //dev
-        //  string connStr = "server=178.128.52.75;user=root;database=sweet_hrm;port=3306;password=password;SslMode=none";
+        //string connStr = "server=178.128.52.75;user=root;database=sweet_hrm;port=3306;password=password;SslMode=none";
 
         //production
         string connStr = "server=178.128.223.188;user=root;database=sweet_hrm;port=3306;password=Sweetitech#;SslMode=none";
